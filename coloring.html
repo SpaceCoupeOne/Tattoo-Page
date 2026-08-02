@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coloring Book</title>
+  <meta name="description" content="Color in a flash-style flower design with your own palette.">
+  <meta property="og:title" content="Coloring Book | Serenity Bliss Tattoos">
+  <meta property="og:description" content="Color in a flash-style flower design with your own palette.">
+  <link rel="icon" type="image/png" href="fish-favicon.png">
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <header>
+    <a href="index.html"><h1>Serenity Bliss Tattoos</h1></a>
+    <nav>
+
+  <a href="about.html">About</a>
+  <a href="aftercare.html">Aftercare</a>
+  <a href="booking.html">Booking</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="games.html">Games</a>
+  <a href="reflections.html">Reflections</a>
+
+    </nav>
+  </header>
+
+  <h2>Coloring Book</h2>
+  <p><a href="games.html">&larr; Back to Games</a></p>
+  <p>Pick a color, then click a section of the flower to fill it in.</p>
+
+  <div class="coloring-wrap">
+
+    <div class="coloring-svg-wrap">
+      <svg id="coloring-svg" viewBox="0 0 400 380" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="190" r="175" fill="none" stroke="#1b1912" stroke-width="2" stroke-dasharray="6 6"></circle>
+
+        <circle class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="70" cy="70" r="10"></circle>
+        <circle class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="330" cy="70" r="10"></circle>
+        <circle class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="70" cy="330" r="8"></circle>
+        <circle class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="330" cy="330" r="8"></circle>
+
+        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="200" cy="150" rx="35" ry="65" transform="rotate(0 200 220)"></ellipse>
+        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="200" cy="150" rx="35" ry="65" transform="rotate(72 200 220)"></ellipse>
+        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="200" cy="150" rx="35" ry="65" transform="rotate(144 200 220)"></ellipse>
+        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="200" cy="150" rx="35" ry="65" transform="rotate(216 200 220)"></ellipse>
+        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="200" cy="150" rx="35" ry="65" transform="rotate(288 200 220)"></ellipse>
+
+        <circle class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="200" cy="220" r="28"></circle>
+
+        <rect class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" x="196" y="245" width="8" height="95" rx="4"></rect>
+
+        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="172" cy="292" rx="30" ry="15" transform="rotate(-25 172 292)"></ellipse>
+        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="228" cy="305" rx="30" ry="15" transform="rotate(25 228 305)"></ellipse>
+      </svg>
+    </div>
+
+    <div class="coloring-controls">
+      <div class="palette">
+        <button class="swatch" data-color="#1b1912" style="background:#1b1912" aria-label="Black"></button>
+        <button class="swatch" data-color="#c0392b" style="background:#c0392b" aria-label="Red"></button>
+        <button class="swatch" data-color="#d4a017" style="background:#d4a017" aria-label="Gold"></button>
+        <button class="swatch" data-color="#1b6b52" style="background:#1b6b52" aria-label="Teal"></button>
+        <button class="swatch" data-color="#6c3483" style="background:#6c3483" aria-label="Purple"></button>
+        <button class="swatch" data-color="#59391b" style="background:#59391b" aria-label="Brown"></button>
+        <button class="swatch" data-color="#e8a5c4" style="background:#e8a5c4" aria-label="Pink"></button>
+        <button class="swatch" data-color="#ffffff" style="background:#ffffff" aria-label="Eraser"></button>
+      </div>
+      <button id="reset-coloring" class="btn">Clear</button>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>Email: <a href="mailto:serenityblisstattoos@gmail.com">serenityblisstattoos@gmail.com</a></p>
+    <p>Instagram: <a href="https://www.instagram.com/serenityblisstattoos" target="_blank" rel="noopener noreferrer">@serenityblisstattoos</a></p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var currentColor = '#c0392b';
+      var swatches = document.querySelectorAll('.swatch');
+      var shapes = document.querySelectorAll('.fillable');
+      var resetBtn = document.getElementById('reset-coloring');
+
+      swatches.forEach(function (swatch) {
+        swatch.addEventListener('click', function () {
+          currentColor = swatch.dataset.color;
+          swatches.forEach(function (s) { s.classList.remove('active'); });
+          swatch.classList.add('active');
+        });
+      });
+
+      shapes.forEach(function (shape) {
+        shape.addEventListener('click', function () {
+          shape.setAttribute('fill', currentColor);
+        });
+      });
+
+      resetBtn.addEventListener('click', function () {
+        shapes.forEach(function (shape) {
+          shape.setAttribute('fill', '#ffffff');
+        });
+      });
+
+      swatches[1].classList.add('active');
+    });
+  </script>
+
+</body>
+
+</html>

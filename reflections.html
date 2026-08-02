@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reflections</title>
+  <meta name="description" content="Reflections — a short film from Serenity Bliss Tattoos.">
+  <meta property="og:title" content="Reflections | Serenity Bliss Tattoos">
+  <meta property="og:description" content="A short film from Serenity Bliss Tattoos.">
+  <link rel="icon" type="image/png" href="fish-favicon.png">
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <header>
+    <a href="index.html"><h1>Serenity Bliss Tattoos</h1></a>
+    <nav>
+
+  <a href="about.html">About</a>
+  <a href="aftercare.html">Aftercare</a>
+  <a href="booking.html">Booking</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="games.html">Games</a>
+  <a href="reflections.html">Reflections</a>
+
+    </nav>
+  </header>
+
+  <section class="reflections-hero">
+    <video id="reflections-video" autoplay muted loop playsinline poster="Photos/Mirror-1.jpg">
+      <source src="Videos/reflections.mp4" type="video/mp4">
+    </video>
+    <div class="reflections-overlay">
+      <h2>Reflections</h2>
+      <p>A short film on the work, in motion.</p>
+      <button id="sound-toggle" class="sound-btn" aria-label="Turn sound on">
+        <span class="sound-icon">🔇</span> Sound
+      </button>
+    </div>
+  </section>
+
+  <footer>
+    <p>Email: <a href="mailto:serenityblisstattoos@gmail.com">serenityblisstattoos@gmail.com</a></p>
+    <p>Instagram: <a href="https://www.instagram.com/serenityblisstattoos" target="_blank" rel="noopener noreferrer">@serenityblisstattoos</a></p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var video = document.getElementById('reflections-video');
+      var toggle = document.getElementById('sound-toggle');
+      var icon = toggle.querySelector('.sound-icon');
+
+      toggle.addEventListener('click', function () {
+        video.muted = !video.muted;
+        icon.textContent = video.muted ? '🔇' : '🔊';
+        toggle.setAttribute('aria-label', video.muted ? 'Turn sound on' : 'Turn sound off');
+      });
+    });
+  </script>
+
+</body>
+
+</html>
