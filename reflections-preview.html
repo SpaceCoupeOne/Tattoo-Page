@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Reflections — Page Preview</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #000;
+      font-family: Georgia, 'Times New Roman', serif;
+    }
+
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .hero video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 1rem;
+      padding: 2rem;
+      background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.45));
+      color: #fff;
+    }
+
+    .overlay h1 {
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      margin: 0;
+    }
+
+    .overlay p {
+      max-width: 32rem;
+      font-size: 1rem;
+      opacity: 0.85;
+      margin: 0;
+    }
+
+    .credits p {
+      font-size: 0.8rem;
+      opacity: 0.65;
+      margin: 0;
+    }
+
+    .sound-btn {
+      margin-top: 1rem;
+      background-color: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 999px;
+      padding: 0.7rem 1.6rem;
+      font: inherit;
+      font-size: 0.95rem;
+      cursor: pointer;
+      backdrop-filter: blur(4px);
+    }
+
+    .sound-btn:hover {
+      background-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .audio-note {
+      position: absolute;
+      bottom: 1rem;
+      left: 1rem;
+      right: 1rem;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.75rem;
+      font-family: system-ui, sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+
+  <section class="hero">
+    <video id="bg-video" autoplay muted loop playsinline>
+      <source src="Page-videos/reflections-preview.mp4" type="video/mp4">
+    </video>
+    <audio id="narration" loop>
+      <source src="Audio/reflections-brightstar.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="overlay">
+      <h1>Reflections: A Page Preview</h1>
+      <p>a quiet space I am building for my wife's portfolio website, paired with a short spoken piece for context.</p>
+
+      <div class="credits">
+        <p>Filmed by Yaroslav Shuraev, used under license via Pexels.</p>
+        <p>"Bright Star" by John Keats, read by Valerie Gordon Walker for LibriVox.</p>
+        <p>Music: "Hidden Forest" by junseolim, via Pixabay.</p>
+      </div>
+
+      <button id="sound-toggle" class="sound-btn" aria-label="Turn narration on">
+        <span class="sound-icon">🔇</span> sound
+      </button>
+    </div>
+
+    <p class="audio-note" id="audio-note"></p>
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var narration = document.getElementById('narration');
+      var toggle = document.getElementById('sound-toggle');
+      var icon = toggle.querySelector('.sound-icon');
+      var note = document.getElementById('audio-note');
+      var narrationReady = true;
+
+      narration.addEventListener('error', function () {
+        narrationReady = false;
+        note.textContent = 'Narration audio failed to load — check Audio/reflections-brightstar.mp3.';
+      });
+
+      toggle.addEventListener('click', function () {
+        if (!narrationReady) return;
+
+        if (narration.paused) {
+          narration.currentTime = 0;
+          narration.play();
+          icon.textContent = '🔊';
+          toggle.setAttribute('aria-label', 'Turn narration off');
+        } else {
+          narration.pause();
+          icon.textContent = '🔇';
+          toggle.setAttribute('aria-label', 'Turn narration on');
+        }
+      });
+    });
+  </script>
+
+</body>
+
+</html>
