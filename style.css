@@ -191,7 +191,15 @@ figure {
   }
 
   nav {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    gap: 1rem;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  nav a {
+    flex-shrink: 0;
   }
 
   .preview-grid,
