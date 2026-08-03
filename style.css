@@ -69,6 +69,9 @@ p, ul {
   padding: 0.75rem 1.5rem;
   border-radius: 999px;
   text-decoration: none;
+  font: inherit;
+  border: none;
+  cursor: pointer;
 }
 
 header {
@@ -77,6 +80,12 @@ header {
   justify-content: space-between;
   padding: 1rem 2rem;
   position: relative;
+}
+
+.made-by-humans {
+  font-style: italic;
+  opacity: 0.75;
+  font-size: 0.9rem;
 }
 
 nav {
@@ -284,7 +293,7 @@ figure {
   max-width: 700px;
 }
 
-/* Booking form: styled like the Google Form it replaces — a stack of
+/* Booking form: styled like the Google Form it replaces, a stack of
    white question cards under a gold top bar, underlined text fields. */
 
 .booking-form {
@@ -389,6 +398,72 @@ figure {
 .booking-form .form-error {
   color: #c0392b;
   font-weight: 600;
+}
+
+.form-step {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-step-title {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.booking-form .form-info {
+  color: var(--color-text);
+}
+
+.booking-form .form-info p {
+  margin: 0 0 0.75rem;
+  line-height: 1.55;
+}
+
+.booking-form .form-info p:last-child {
+  margin-bottom: 0;
+}
+
+.booking-form textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--color-text);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  padding: 0.4rem 0.1rem;
+  resize: vertical;
+}
+
+.booking-form textarea:focus {
+  outline: none;
+  border-bottom-color: var(--color-accent);
+}
+
+.booking-form .form-hint {
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0.5rem 0;
+}
+
+.booking-form input[type="file"] {
+  display: block;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.form-nav {
+  display: flex;
+  gap: 1rem;
 }
 
 .quick-version {
