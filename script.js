@@ -14,4 +14,22 @@ document.addEventListener('DOMContentLoaded', function () {
   overlay.addEventListener('click', function () {
     overlay.classList.remove('active');
   });
+
+  var filterButtons = document.querySelectorAll('.filter-btn');
+  var galleryPhotos = document.querySelectorAll('.gallery-grid img');
+
+  filterButtons.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      filterButtons.forEach(function (b) {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+
+      var filter = btn.dataset.filter;
+      galleryPhotos.forEach(function (photo) {
+        var show = filter === 'all' || photo.dataset.category === filter;
+        photo.classList.toggle('hidden', !show);
+      });
+    });
+  });
 });
