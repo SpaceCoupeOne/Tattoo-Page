@@ -122,14 +122,103 @@ unsure of the design.</p>
   <p><strong>PLEASE NOTE:</strong> I have had many issues in the past with my responding email going to your spam folder. If you have not received a response in up to 5 business days, please check your spam as I realize this is a common occurrence. Please call the studio if you need assistance booking.</p>
   <p>I will make my best effort to get everyone into my books but spaces are limited. My intention is not to make it more difficult to book with or contact me, but my aim is to make sure that the proper care and attention can be given to each client.</p>
 
-  <p>Ready to get started?</p>
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSeGs7pdqwclCakid67BydzdIoR9YqulIfVpo4gLBcnpFuheIw/viewform" class="btn" target="_blank" rel="noopener noreferrer">Begin Booking!</a>
+  <h3>Ready to get started?</h3>
+
+  <form name="tattoo-appointment-request" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="booking-form" id="booking-form">
+    <input type="hidden" name="form-name" value="tattoo-appointment-request">
+    <p class="hidden-field">
+      <label>Don't fill this out if you're human: <input name="bot-field"></label>
+    </p>
+
+    <div class="form-field">
+      <label for="field-name">Name (as seen on ID) <span class="required">*</span></label>
+      <input type="text" id="field-name" name="name" required>
+    </div>
+
+    <div class="form-field">
+      <label for="field-preferred-name">Preferred Name and Pronouns</label>
+      <input type="text" id="field-preferred-name" name="preferred_name_pronouns">
+    </div>
+
+    <div class="form-field">
+      <label for="field-email">Email (I will reach out to you about your appointment request through this email) <span class="required">*</span></label>
+      <input type="email" id="field-email" name="email" required>
+    </div>
+
+    <div class="form-field">
+      <label for="field-phone">Phone number <span class="required">*</span></label>
+      <input type="tel" id="field-phone" name="phone" required>
+    </div>
+
+    <div class="form-field form-checkbox">
+      <label>
+        <input type="checkbox" name="contact_consent" value="Yes" required>
+        I understand that I may be contacted through my email or phone number in regards to my appointment. <span class="required">*</span>
+      </label>
+    </div>
+
+    <fieldset class="form-field">
+      <legend>Are you a returning client? <span class="required">*</span></legend>
+      <label class="form-radio"><input type="radio" name="returning_client" value="Yes" required> Yes</label>
+      <label class="form-radio"><input type="radio" name="returning_client" value="No" required> No</label>
+    </fieldset>
+
+    <div class="form-field form-checkbox">
+      <label>
+        <input type="checkbox" name="age_18_plus" value="Yes" required>
+        I am above the age of 18 <span class="required">*</span>
+      </label>
+    </div>
+
+    <div class="form-field form-checkbox">
+      <label>
+        <input type="checkbox" name="valid_id" value="Yes" required>
+        I am able to provide a valid ID at the time of the appointment (passport, government issued ID, drivers license, etc.) <span class="required">*</span>
+      </label>
+    </div>
+
+    <button type="submit" class="btn">Begin Booking!</button>
+    <p id="booking-form-error" class="form-error" hidden>Something went wrong sending that. Please email me directly at <a href="mailto:serenityblisstattoos@gmail.com">serenityblisstattoos@gmail.com</a> instead.</p>
+  </form>
+
+  <div id="booking-form-success" class="callout" hidden>
+    <p><strong>Thanks! Your request is in.</strong> I'll reach out to the email you provided within 3 business days. If it's been longer than 5, please check your spam folder before reaching back out.</p>
+  </div>
 
   <footer>
     <p>Location: <a href="https://www.google.com/maps/search/?api=1&query=Red+Dagger+Tattoo%2C+Pasadena%2C+TX" target="_blank" rel="noopener noreferrer">Red Dagger Tattoo</a></p>
     <p>Email: <a href="mailto:serenityblisstattoos@gmail.com">serenityblisstattoos@gmail.com</a></p>
     <p>Instagram: <a href="https://www.instagram.com/serenityblisstattoos" target="_blank" rel="noopener noreferrer">@serenityblisstattoos</a></p>
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var form = document.getElementById('booking-form');
+      var successEl = document.getElementById('booking-form-success');
+      var errorEl = document.getElementById('booking-form-error');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        errorEl.hidden = true;
+
+        var data = new FormData(form);
+
+        fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(data).toString()
+        })
+          .then(function (response) {
+            if (!response.ok) throw new Error('Form submission failed');
+            form.hidden = true;
+            successEl.hidden = false;
+          })
+          .catch(function () {
+            errorEl.hidden = false;
+          });
+      });
+    });
+  </script>
 
 </body>
 
