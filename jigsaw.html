@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jigsaw</title>
+  <meta name="description" content="Piece together a shuffled tattoo photo — an easy jigsaw puzzle for all ages.">
+  <meta property="og:title" content="Jigsaw | Serenity Bliss Tattoos">
+  <meta property="og:description" content="Piece together a shuffled tattoo photo — an easy jigsaw puzzle for all ages.">
+  <link rel="icon" type="image/png" href="fish-favicon.png">
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <header>
+    <a href="index.html"><h1>Serenity Bliss Tattoos</h1></a>
+    <nav>
+
+  <a href="about.html">About</a>
+  <a href="aftercare.html">Aftercare</a>
+  <a href="booking.html">Booking</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="games.html">Games</a>
+  <a href="reflections.html" class="nav-hide">Reflections</a>
+
+    </nav>
+  </header>
+
+  <h2>Jigsaw</h2>
+  <p><a href="games.html">&larr; Back to Games</a></p>
+  <p>Click a piece, then click another to swap them. Match up the photo to win.</p>
+
+  <div class="jigsaw-wrap">
+    <div class="jigsaw-board-wrap">
+      <div class="jigsaw-grid" id="jigsaw-grid"></div>
+    </div>
+    <div class="jigsaw-side">
+      <p id="jigsaw-status">Mix it up and start swapping!</p>
+      <button id="jigsaw-new" class="btn">New Puzzle</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>Location: <a href="https://www.google.com/maps/search/?api=1&query=Red+Dagger+Tattoo%2C+Pasadena%2C+TX" target="_blank" rel="noopener noreferrer">Red Dagger Tattoo</a></p>
+    <p>Email: <a href="mailto:serenityblisstattoos@gmail.com">serenityblisstattoos@gmail.com</a></p>
+    <p>Instagram: <a href="https://www.instagram.com/serenityblisstattoos" target="_blank" rel="noopener noreferrer">@serenityblisstattoos</a></p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var GRID = 3;
+      var PIECE_COUNT = GRID * GRID;
+
+      var images = [
+        { src: 'Photos/Snail.jpg', alt: 'Illustrative garden snail tattoo' },
+        { src: 'Photos/Birb-1.jpg', alt: 'Bird perched on a branch tattoo' },
+        { src: 'Photos/Horses.jpg', alt: 'Two horse heads tattoo' },
+        { src: 'Photos/Crane.jpg', alt: 'Heron and fish tattoo' },
+        { src: 'Photos/Dino-1.jpg', alt: 'Illustrative dinosaur skull tattoo' },
+        { src: 'Photos/Fish-1.jpg', alt: 'Illustrative koi fish tattoo' },
+        { src: 'Photos/Floral-2.jpg', alt: 'Full color wildflower bouquet tattoo' },
+        { src: 'Photos/Moth-1.jpg', alt: 'Full color luna moth tattoo' },
+        { src: 'Photos/Fairy-1.jpg', alt: 'Mushroom fairy tattoo' },
+        { src: 'Photos/Cherub.jpg', alt: 'Full color cherubs tattoo' }
+      ];
+
+      var gridEl = document.getElementById('jigsaw-grid');
+      var statusEl = document.getElementById('jigsaw-status');
+      var newPuzzleBtn = document.getElementById('jigsaw-new');
+
+      gridEl.style.gridTemplateColumns = 'repeat(' + GRID + ', 1fr)';
+
+      var order = [];
+      var pieceEls = [];
+      var selected = null;
+      var currentImage = null;
+
+      function shuffle(arr) {
+        for (var i = arr.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = tmp;
+        }
+        return arr;
+      }
+
+      function isSolved() {
+        for (var i = 0; i < order.length; i++) {
+          if (order[i] !== i) return false;
+        }
+        return true;
+      }
+
+      function render() {
+        for (var pos = 0; pos < PIECE_COUNT; pos++) {
+          var pieceIndex = order[pos];
+          var row = Math.floor(pieceIndex / GRID);
+          var col = pieceIndex % GRID;
+          var el = pieceEls[pos];
+          el.style.backgroundImage = 'url(' + currentImage.src + ')';
+          el.style.backgroundSize = (GRID * 100) + '% ' + (GRID * 100) + '%';
+          el.style.backgroundPosition = (col / (GRID - 1) * 100) + '% ' + (row / (GRID - 1) * 100) + '%';
+          el.classList.toggle('selected', pos === selected);
+        }
+      }
+
+      function handlePieceClick(pos) {
+        if (selected === null) {
+          selected = pos;
+          render();
+          return;
+        }
+        if (selected === pos) {
+          selected = null;
+          render();
+          return;
+        }
+        var tmp = order[selected];
+        order[selected] = order[pos];
+        order[pos] = tmp;
+        selected = null;
+        render();
+
+        if (isSolved()) {
+          statusEl.textContent = 'Solved! Nice work.';
+        }
+      }
+
+      function buildGrid() {
+        gridEl.innerHTML = '';
+        pieceEls = [];
+        for (var pos = 0; pos < PIECE_COUNT; pos++) {
+          (function (pos) {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'jigsaw-piece';
+            btn.setAttribute('aria-label', 'Puzzle piece ' + (pos + 1));
+            btn.addEventListener('click', function () {
+              handlePieceClick(pos);
+            });
+            gridEl.appendChild(btn);
+            pieceEls.push(btn);
+          })(pos);
+        }
+      }
+
+      function newPuzzle() {
+        currentImage = images[Math.floor(Math.random() * images.length)];
+        gridEl.setAttribute('aria-label', currentImage.alt);
+        order = [];
+        for (var i = 0; i < PIECE_COUNT; i++) order.push(i);
+        do {
+          shuffle(order);
+        } while (isSolved());
+        selected = null;
+        statusEl.textContent = 'Mix it up and start swapping!';
+        render();
+      }
+
+      newPuzzleBtn.addEventListener('click', newPuzzle);
+
+      buildGrid();
+      newPuzzle();
+    });
+  </script>
+
+</body>
+
+</html>

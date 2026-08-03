@@ -252,6 +252,15 @@ figure {
   }
 }
 
+.lang-switch {
+  display: inline-block;
+  border: 2px solid var(--color-accent);
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
 .quick-version {
   background-color: var(--color-accent);
   color: var(--color-bg);
@@ -268,6 +277,14 @@ figure {
 .quick-version ul {
   margin-bottom: 0;
   max-width: none;
+}
+
+.disclaimer {
+  font-style: italic;
+  border-left: 4px solid var(--color-accent);
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  max-width: 700px;
 }
 
 @media (max-width: 480px) {
@@ -372,9 +389,9 @@ figure {
   cursor: pointer;
 }
 
-/* Chess */
+/* Minesweeper */
 
-.chess-wrap {
+.mines-wrap {
   display: flex;
   flex-wrap: wrap;
   gap: 2rem;
@@ -382,23 +399,166 @@ figure {
   margin-top: 2rem;
 }
 
-.chess-board {
+.mines-grid {
+  display: grid;
+  gap: 2px;
   width: 100%;
-  max-width: 480px;
-  flex: 1 1 320px;
+  max-width: 340px;
+  flex: 1 1 280px;
 }
 
-.chess-side {
+.mine-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.9rem;
+  background-color: var(--color-bg);
+  color: var(--color-accent);
+  border: 2px solid var(--color-accent);
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mine-cell.revealed {
+  background-color: #ffffff;
+  cursor: default;
+}
+
+.mine-cell.mine.revealed {
+  background-color: #c0392b;
+}
+
+.mines-side {
   flex: 0 1 200px;
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.chess-side button {
-  border: none;
+.mines-side button {
   font: inherit;
+}
+
+/* Falling sand */
+
+.sand-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.sand-canvas-wrap {
+  flex: 1 1 320px;
+  max-width: 420px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+#sand-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  background-color: #f4f1e6;
+  touch-action: none;
+  image-rendering: pixelated;
+}
+
+.sand-controls {
+  flex: 0 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Mandala maker */
+
+.mandala-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.mandala-controls {
+  flex: 0 1 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mandala-symmetry {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.mandala-canvas-wrap {
+  flex: 1 1 320px;
+  max-width: 460px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+#mandala-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  touch-action: none;
+}
+
+/* Jigsaw */
+
+.jigsaw-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.jigsaw-board-wrap {
+  flex: 1 1 280px;
+  max-width: 360px;
+}
+
+.jigsaw-grid {
+  display: grid;
+  gap: 3px;
+  aspect-ratio: 3 / 4;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.jigsaw-piece {
+  aspect-ratio: 3 / 4;
+  border: none;
+  padding: 0;
   cursor: pointer;
+  background-repeat: no-repeat;
+  outline: 3px solid transparent;
+  outline-offset: -3px;
+}
+
+.jigsaw-piece.selected {
+  outline-color: var(--color-accent);
+}
+
+.jigsaw-side {
+  flex: 0 1 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 /* Reflections */
