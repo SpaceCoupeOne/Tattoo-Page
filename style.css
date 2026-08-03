@@ -275,6 +275,15 @@ figure {
   font-weight: 600;
 }
 
+.callout {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  max-width: 700px;
+}
+
 .quick-version {
   background-color: var(--color-accent);
   color: var(--color-bg);
