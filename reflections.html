@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Reflections</title>
-  <meta name="description" content="Reflections — a short film from Serenity Bliss Tattoos.">
+  <meta name="description" content="Reflections: a short film from Serenity Bliss Tattoos.">
   <meta property="og:title" content="Reflections | Serenity Bliss Tattoos">
   <meta property="og:description" content="A short film from Serenity Bliss Tattoos.">
   <link rel="icon" type="image/png" href="fish-favicon.png">
@@ -46,6 +46,9 @@
     </div>
   </section>
 
+  <!-- TODO: needs a <track kind="captions"> pointing to a WebVTT file (if the video has spoken audio),
+       or a visible transcript section, once the actual audio content is known. See chat for details. -->
+
   <footer>
     <p>Location: <a href="https://www.google.com/maps/search/?api=1&query=Red+Dagger+Tattoo%2C+Pasadena%2C+TX" target="_blank" rel="noopener noreferrer">Red Dagger Tattoo</a></p>
     <p>Email: <a href="mailto:serenityblisstattoos@gmail.com">serenityblisstattoos@gmail.com</a></p>
@@ -57,6 +60,13 @@
       var video = document.getElementById('reflections-video');
       var toggle = document.getElementById('sound-toggle');
       var icon = toggle.querySelector('.sound-icon');
+
+      var prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (prefersReducedMotion) {
+        video.removeAttribute('autoplay');
+        video.pause();
+        video.currentTime = 0;
+      }
 
       toggle.addEventListener('click', function () {
         video.muted = !video.muted;
