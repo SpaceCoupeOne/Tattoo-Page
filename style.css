@@ -153,8 +153,16 @@ figure {
   gap: 2rem;
 }
 
-.gallery-grid img.hidden {
+.gallery-item.hidden {
   display: none;
+}
+
+.gallery-item {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: block;
 }
 
 .gallery-filters {

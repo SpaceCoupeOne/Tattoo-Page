@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function () {
   var overlay = document.querySelector('.lightbox-overlay');
   var overlayImg = overlay.querySelector('img');
-  var galleryImages = document.querySelectorAll('.gallery-grid img, .preview-grid img');
+  var lightboxTriggers = document.querySelectorAll('.gallery-item, .preview-grid img');
 
-  galleryImages.forEach(function (img) {
-    img.addEventListener('click', function () {
+  lightboxTriggers.forEach(function (trigger) {
+    trigger.addEventListener('click', function () {
+      var img = trigger.tagName === 'IMG' ? trigger : trigger.querySelector('img');
       overlayImg.src = img.src;
       overlayImg.alt = img.alt;
       overlay.classList.add('active');
@@ -15,20 +16,28 @@ document.addEventListener('DOMContentLoaded', function () {
     overlay.classList.remove('active');
   });
 
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      overlay.classList.remove('active');
+    }
+  });
+
   var filterButtons = document.querySelectorAll('.filter-btn');
-  var galleryPhotos = document.querySelectorAll('.gallery-grid img');
+  var galleryItems = document.querySelectorAll('.gallery-item');
 
   filterButtons.forEach(function (btn) {
     btn.addEventListener('click', function () {
       filterButtons.forEach(function (b) {
         b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
       });
       btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
 
       var filter = btn.dataset.filter;
-      galleryPhotos.forEach(function (photo) {
-        var show = filter === 'all' || photo.dataset.category === filter;
-        photo.classList.toggle('hidden', !show);
+      galleryItems.forEach(function (item) {
+        var show = filter === 'all' || item.dataset.category === filter;
+        item.classList.toggle('hidden', !show);
       });
     });
   });
