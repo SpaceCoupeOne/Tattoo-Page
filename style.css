@@ -134,8 +134,8 @@ footer p {
   right: -100px;
   width: 400px;
   height: 400px;
-  background-color: #e3d0ad;
-  opacity: 0.4;
+  background-color: #c97b4f;
+  opacity: 0.35;
 }
 
 .shape-2 {
@@ -143,8 +143,8 @@ footer p {
   left: 5%;
   width: 200px;
   height: 200px;
-  background-color: #c9d6b0;
-  opacity: 0.4;
+  background-color: #8fa876;
+  opacity: 0.35;
 }
 
 .shape-3 {
@@ -152,8 +152,45 @@ footer p {
   left: 25%;
   width: 140px;
   height: 140px;
-  background-color: #e8c9a8;
-  opacity: 0.4;
+  background-color: #b5678a;
+  opacity: 0.35;
+}
+
+.page-shape {
+  position: fixed;
+  border-radius: 50%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.page-shape-a {
+  top: -70px;
+  right: -70px;
+  width: 240px;
+  height: 240px;
+  background-color: #c97b4f;
+  opacity: 0.3;
+}
+
+.page-shape-b {
+  bottom: -90px;
+  left: -60px;
+  width: 200px;
+  height: 200px;
+  background-color: #8fa876;
+  opacity: 0.3;
+}
+
+@media (max-width: 768px) {
+  .page-shape-a {
+    width: 160px;
+    height: 160px;
+  }
+
+  .page-shape-b {
+    width: 140px;
+    height: 140px;
+  }
 }
 
 figure {
