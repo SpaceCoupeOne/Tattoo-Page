@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memory Match</title>
+  <meta name="description" content="Match pairs of tattoo photos in this memory game.">
+  <meta property="og:title" content="Memory Match | Serenity Bliss Tattoos">
+  <meta property="og:description" content="Match pairs of tattoo photos in this memory game.">
+  <link rel="icon" type="image/png" href="fish-favicon.png">
+  <link rel="stylesheet" href="style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <header>
+    <a href="index.html"><h1>Serenity Bliss Tattoos</h1></a>
+    <nav>
+
+  <a href="about.html">About</a>
+  <a href="aftercare.html">Aftercare</a>
+  <a href="booking.html">Booking</a>
+  <a href="faq.html">FAQ</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="games.html">Games</a>
+  <a href="reflections.html" class="nav-hide">Reflections</a>
+
+    </nav>
+  </header>
+
+  <h2>Memory Match</h2>
+  <p><a href="games.html">&larr; Back to Games</a></p>
+  <p>Flip two cards at a time and find every matching pair.</p>
+
+  <div class="memory-wrap">
+    <div class="memory-grid" id="memory-grid"></div>
+    <div class="memory-side">
+      <p id="memory-status">Moves: 0 &middot; Pairs found: 0/8</p>
+      <button id="memory-new" class="btn">New Game</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>Location: <a href="https://www.google.com/maps/search/?api=1&query=Red+Dagger+Tattoo%2C+Pasadena%2C+TX" target="_blank" rel="noopener noreferrer">Red Dagger Tattoo</a></p>
+    <p>Email: <a href="mailto:serenityblisstattoos@gmail.com">serenityblisstattoos@gmail.com</a></p>
+    <p>Instagram: <a href="https://www.instagram.com/serenityblisstattoos" target="_blank" rel="noopener noreferrer">@serenityblisstattoos</a></p>
+    <p class="made-by-humans">Made by Humans - 2026</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var images = [
+        { src: 'Photos/Snail.jpg', alt: 'Illustrative garden snail tattoo' },
+        { src: 'Photos/Birb-1.jpg', alt: 'Bird perched on a branch tattoo' },
+        { src: 'Photos/Horses.jpg', alt: 'Two horse heads tattoo' },
+        { src: 'Photos/Crane.jpg', alt: 'Heron and fish tattoo' },
+        { src: 'Photos/Dino-1.jpg', alt: 'Illustrative dinosaur skull tattoo' },
+        { src: 'Photos/Fish-1.jpg', alt: 'Illustrative koi fish tattoo' },
+        { src: 'Photos/Floral-2.jpg', alt: 'Full color wildflower bouquet tattoo' },
+        { src: 'Photos/Fairy-1.jpg', alt: 'Mushroom fairy tattoo' }
+      ];
+
+      var gridEl = document.getElementById('memory-grid');
+      var statusEl = document.getElementById('memory-status');
+      var newGameBtn = document.getElementById('memory-new');
+
+      var totalPairs = images.length;
+      var flipped = [];
+      var matchedCount = 0;
+      var moves = 0;
+      var lock = false;
+
+      function shuffle(arr) {
+        for (var i = arr.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = arr[i];
+          arr[i] = arr[j];
+          arr[j] = tmp;
+        }
+        return arr;
+      }
+
+      function updateStatus() {
+        statusEl.textContent = 'Moves: ' + moves + ' · Pairs found: ' + matchedCount + '/' + totalPairs;
+      }
+
+      function buildDeck() {
+        var deck = [];
+        images.forEach(function (img, i) {
+          deck.push({ pairId: i, src: img.src, alt: img.alt });
+          deck.push({ pairId: i, src: img.src, alt: img.alt });
+        });
+        return shuffle(deck);
+      }
+
+      function handleCardClick(card) {
+        if (lock) return;
+        if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+
+        card.classList.add('flipped');
+        flipped.push(card);
+
+        if (flipped.length === 2) {
+          moves++;
+          updateStatus();
+          lock = true;
+
+          var a = flipped[0];
+          var b = flipped[1];
+
+          if (a.dataset.pairId === b.dataset.pairId) {
+            a.classList.add('matched');
+            b.classList.add('matched');
+            flipped = [];
+            lock = false;
+            matchedCount++;
+            updateStatus();
+            if (matchedCount === totalPairs) {
+              statusEl.textContent = 'You found all ' + totalPairs + ' pairs in ' + moves + ' moves!';
+            }
+          } else {
+            setTimeout(function () {
+              a.classList.remove('flipped');
+              b.classList.remove('flipped');
+              flipped = [];
+              lock = false;
+            }, 900);
+          }
+        }
+      }
+
+      function newGame() {
+        var deck = buildDeck();
+        gridEl.innerHTML = '';
+        flipped = [];
+        matchedCount = 0;
+        moves = 0;
+        lock = false;
+        updateStatus();
+
+        deck.forEach(function (card) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'memory-card';
+          btn.dataset.pairId = card.pairId;
+          btn.setAttribute('aria-label', 'Face-down card');
+
+          var inner = document.createElement('div');
+          inner.className = 'memory-card-inner';
+
+          var back = document.createElement('div');
+          back.className = 'memory-card-back';
+          back.textContent = '?';
+
+          var front = document.createElement('div');
+          front.className = 'memory-card-front';
+          front.style.backgroundImage = 'url(' + card.src + ')';
+
+          inner.appendChild(back);
+          inner.appendChild(front);
+          btn.appendChild(inner);
+
+          btn.addEventListener('click', function () {
+            handleCardClick(btn);
+          });
+
+          gridEl.appendChild(btn);
+        });
+      }
+
+      newGameBtn.addEventListener('click', newGame);
+
+      newGame();
+    });
+  </script>
+
+</body>
+
+</html>
