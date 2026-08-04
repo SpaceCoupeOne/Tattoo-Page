@@ -35,7 +35,7 @@
   </header>
 
   <h2>Games</h2>
-  <p>Waiting on a touch-up, or just need a break? Pick something to play.</p>
+  <p>Waiting on a touch-up, or just need a break? Pick something to play!</p>
 
   <div class="game-menu">
     <a class="game-card" href="coloring.html">
@@ -64,12 +64,70 @@
     </a>
   </div>
 
+  <h3>Have an idea for the website?</h3>
+  <p>If there's a game or feature you'd like to see here, let us know.</p>
+
+  <form name="website-idea" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="booking-form" id="idea-form">
+    <input type="hidden" name="form-name" value="website-idea">
+    <p class="hidden-field">
+      <label>Don't fill this out if you're human: <input name="bot-field"></label>
+    </p>
+
+    <div class="form-field">
+      <label for="idea-field-name">Your name</label>
+      <input type="text" id="idea-field-name" name="name">
+    </div>
+
+    <div class="form-field">
+      <label for="idea-field-idea">Your idea</label>
+      <textarea id="idea-field-idea" name="idea" rows="2" required></textarea>
+    </div>
+
+    <div class="form-nav">
+      <button type="submit" class="btn">Send</button>
+    </div>
+
+    <p id="idea-form-error" class="form-error" hidden>Something went wrong sending that. Please email me directly at <a href="mailto:serenityblisstattoos@gmail.com">serenityblisstattoos@gmail.com</a> instead.</p>
+  </form>
+
+  <div id="idea-form-success" class="callout" hidden>
+    <p><strong>Thanks for the idea!</strong> We'll take a look.</p>
+  </div>
+
   <footer>
     <p>Location: <a href="https://www.google.com/maps/search/?api=1&query=Red+Dagger+Tattoo%2C+Pasadena%2C+TX" target="_blank" rel="noopener noreferrer">Red Dagger Tattoo</a></p>
     <p>Email: <a href="mailto:serenityblisstattoos@gmail.com">serenityblisstattoos@gmail.com</a></p>
     <p>Instagram: <a href="https://www.instagram.com/serenityblisstattoos" target="_blank" rel="noopener noreferrer">@serenityblisstattoos</a></p>
     <p class="made-by-humans">Made by Humans - 2026</p>
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var form = document.getElementById('idea-form');
+      var successEl = document.getElementById('idea-form-success');
+      var errorEl = document.getElementById('idea-form-error');
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        errorEl.hidden = true;
+
+        var data = new FormData(form);
+
+        fetch('/', {
+          method: 'POST',
+          body: data
+        })
+          .then(function (response) {
+            if (!response.ok) throw new Error('Form submission failed');
+            form.hidden = true;
+            successEl.hidden = false;
+          })
+          .catch(function () {
+            errorEl.hidden = false;
+          });
+      });
+    });
+  </script>
 
 </body>
 
