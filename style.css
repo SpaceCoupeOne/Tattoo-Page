@@ -26,6 +26,7 @@ body {
   padding: 0 2rem 4rem;
   position: relative;
   font-size: 1.05rem;
+  font-family: 'Work Sans', sans-serif;
 }
 
 img {
@@ -291,6 +292,15 @@ figure {
   padding: 1.25rem 1.5rem;
   margin: 1.5rem 0;
   max-width: 700px;
+  line-height: 1.55;
+}
+
+.callout p {
+  margin: 0 0 0.5rem;
+}
+
+.callout p:last-child {
+  margin-bottom: 0;
 }
 
 /* Booking form: styled like the Google Form it replaces, a stack of
