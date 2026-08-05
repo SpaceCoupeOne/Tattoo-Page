@@ -35,7 +35,21 @@ img {
 
 a {
   color: var(--color-accent);
+}
+
+nav a,
+footer a,
+.btn,
+.filter-btn,
+.game-card,
+.lang-switch,
+.preview-grid figcaption a {
   text-decoration: none;
+}
+
+p a,
+li a {
+  text-decoration: underline;
 }
 
 /* Focus + hover */
