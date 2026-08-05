@@ -45,7 +45,7 @@
     <p>The deposit ranges between $100 to $200 depending on the design, and is due only after a date and time have been decided.</p>
   </div>
 
-  <form name="tattoo-appointment-request" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="booking-form" id="booking-form">
+  <form name="tattoo-appointment-request" method="POST" action="thank-you.html" enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-field" class="booking-form" id="booking-form">
     <input type="hidden" name="form-name" value="tattoo-appointment-request">
     <p class="hidden-field">
       <label>Don't fill this out if you're human: <input name="bot-field"></label>
@@ -225,12 +225,7 @@
     </div>
 
     <p id="file-size-error" class="form-error" hidden></p>
-    <p id="booking-form-error" class="form-error" hidden>Something went wrong sending that! Please try again or email me directly at <a href="mailto:serenityblisstattoos@gmail.com">serenityblisstattoos@gmail.com</a> instead.</p>
   </form>
-
-  <div id="booking-form-success" class="callout" hidden>
-    <p><strong>Thanks! Your request has been submitted!</strong> I'll reach out to the email you provided within 3 business days. If it's been longer than 5, please check your spam folder before reaching back out.</p>
-  </div>
 
   <footer>
     <p>Location: <a href="https://www.google.com/maps/search/?api=1&query=Red+Dagger+Tattoo%2C+Pasadena%2C+TX" target="_blank" rel="noopener noreferrer">Red Dagger Tattoo</a></p>
@@ -242,8 +237,6 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var form = document.getElementById('booking-form');
-      var successEl = document.getElementById('booking-form-success');
-      var errorEl = document.getElementById('booking-form-error');
       var fileSizeErrorEl = document.getElementById('file-size-error');
 
       var MAX_TOTAL_FILE_BYTES = 7 * 1024 * 1024;
@@ -280,25 +273,18 @@
       coverupNo.addEventListener('change', toggleCoverupFollowup);
 
       form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        if (!form.reportValidity()) return;
-        if (!checkFileSize()) return;
-        errorEl.hidden = true;
-
-        var data = new FormData(form);
-
-        fetch('/', {
-          method: 'POST',
-          body: data
-        })
-          .then(function (response) {
-            if (!response.ok) throw new Error('Form submission failed');
-            form.hidden = true;
-            successEl.hidden = false;
-          })
-          .catch(function () {
-            errorEl.hidden = false;
-          });
+        if (!form.reportValidity()) {
+          e.preventDefault();
+          return;
+        }
+        if (!checkFileSize()) {
+          e.preventDefault();
+          return;
+        }
+        // Valid: let the browser submit natively (full page POST) instead of
+        // intercepting with fetch. Netlify's AJAX+file-upload path is known to
+        // be unreliable; a native multipart submit is the well-tested route
+        // for forms with file attachments.
       });
     });
   </script>

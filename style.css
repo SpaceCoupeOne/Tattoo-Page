@@ -207,6 +207,14 @@ figure {
   gap: 1.5rem;
 }
 
+.preview-grid figcaption {
+  margin-top: 0.4rem;
+}
+
+.preview-grid figcaption a {
+  font-size: 0.9rem;
+}
+
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
