@@ -49,8 +49,8 @@ h1 {
 
 .site-logo {
   display: block;
-  height: 72px;
-  width: auto;
+  width: 100%;
+  height: auto;
   border-radius: 10px;
   box-shadow: 0 4px 14px rgba(27, 25, 18, 0.3);
 }
@@ -85,9 +85,10 @@ p, ul {
 
 header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 1rem 2rem;
+  padding: 1.5rem 2rem 2.5rem;
+  gap: 1rem;
   position: relative;
 }
 
@@ -103,8 +104,16 @@ header {
 
 nav {
   display: flex;
-  gap: 1.5rem;
+  gap: 2.75rem;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+nav a {
+  font-size: 1.15rem;
+  font-weight: 500;
 }
 
 .nav-hide {
@@ -299,9 +308,8 @@ figure {
 
 @media (max-width: 768px) {
   header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    align-items: center;
+    gap: 0.75rem;
     padding: 1rem 0;
   }
 
@@ -310,7 +318,9 @@ figure {
   }
 
   .site-logo {
-    height: 48px;
+    width: 220px;
+    max-width: 60vw;
+    height: auto;
   }
 
   nav {
