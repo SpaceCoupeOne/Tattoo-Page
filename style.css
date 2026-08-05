@@ -38,6 +38,36 @@ a {
   text-decoration: none;
 }
 
+/* Focus + hover */
+
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+a:hover,
+nav a:hover {
+  text-decoration: underline;
+}
+
+.btn:hover,
+.filter-btn:hover {
+  filter: brightness(1.15);
+}
+
+.btn,
+.filter-btn,
+.game-card,
+.gallery-item {
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+
+.game-card:hover,
+.gallery-item:hover {
+  transform: translateY(-3px);
+}
+
 h1, h2, h3 {
   font-family: 'Fraunces', serif;
 }
@@ -445,8 +475,7 @@ figure {
 .booking-form input[type="text"]:focus,
 .booking-form input[type="email"]:focus,
 .booking-form input[type="tel"]:focus {
-  outline: none;
-  border-bottom-color: var(--color-accent);
+  border-bottom: 2px solid var(--color-accent);
 }
 
 .booking-form .form-checkbox label {
@@ -527,8 +556,7 @@ figure {
 }
 
 .booking-form textarea:focus {
-  outline: none;
-  border-bottom-color: var(--color-accent);
+  border-bottom: 2px solid var(--color-accent);
 }
 
 .booking-form .form-hint {
