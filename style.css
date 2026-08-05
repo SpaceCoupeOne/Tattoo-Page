@@ -87,8 +87,8 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1.5rem 2rem 2.5rem;
-  gap: 1rem;
+  padding: 1.5rem 2rem 3.5rem;
+  gap: 1.25rem;
   position: relative;
 }
 
@@ -104,7 +104,7 @@ header {
 
 nav {
   display: flex;
-  gap: 2.75rem;
+  gap: 2.5rem;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -112,7 +112,7 @@ nav {
 }
 
 nav a {
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   font-weight: 500;
 }
 
@@ -325,6 +325,7 @@ figure {
 
   nav {
     flex-wrap: nowrap;
+    justify-content: flex-start;
     gap: 1rem;
     width: 100%;
     overflow-x: auto;
