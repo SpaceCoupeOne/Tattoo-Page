@@ -47,6 +47,14 @@ h1 {
   color: var(--color-text);
 }
 
+.site-logo {
+  display: block;
+  height: 72px;
+  width: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(27, 25, 18, 0.3);
+}
+
 h2, h3 {
   color: var(--color-accent);
 }
@@ -299,6 +307,10 @@ figure {
 
   header h1 {
     font-size: 1.4rem;
+  }
+
+  .site-logo {
+    height: 48px;
   }
 
   nav {
