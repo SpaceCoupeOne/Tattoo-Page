@@ -244,7 +244,8 @@ footer p {
   opacity: 0.35;
 }
 
-.page-shape {
+.page-shape-a,
+.page-shape-b {
   position: fixed;
   border-radius: 50%;
   z-index: -1;
