@@ -1,18 +1,20 @@
 :root {
-  /* ground — Miami */
+  /* ground */
   --color-bg:      #10262b;
   --color-surface: #241031;
   --color-text:    #f4e9f2;
   --color-muted:   #dfd5e5;
+  --color-ink:     #0d3b45;  /* dark teal, for text on cream fills */
 
   /* brand — from the banner */
   --color-accent:   #f0c000;  /* gold */
   --color-accent-2: #f04830;  /* coral */
   --color-amber:    #f0a050;
 
-  /* atmosphere — Miami */
-  --color-cyan:   #00b4f0;
-  --color-pink:   #ff69b4;
+  /* atmosphere */
+  --color-cyan: #00b4f0;  /* focus rings only — everything else moved off cyan, see .btn comment below */
+  --color-pink: #ff69b4;
+  --color-teal: #3d8b98;  /* lightened #235861, for borders/accents on --color-surface panels */
 }
 
 html {
@@ -156,26 +158,23 @@ p, ul {
   line-height: 1.6;
 }
 
-/* Not gold: gold (#f0c000) sits right next to her yellow (#f3db0c) in
-   both hue and lightness, so a gold .btn would nearly disappear
-   wherever it lands on the gradient — and .btn shows up at every depth
-   across the site (hero CTAs near the top, FAQ/gallery's booking links
-   mid-page, form submit buttons at the very bottom). No single accent
-   color solves this cleanly: the gradient runs from bright yellow down
-   to medium-dark orange, so a color with strong contrast against one
-   end has weak contrast against the other (checked cyan/pink/coral
-   against both — none broke 2.7:1 against orange). Same approach as
-   the footer: independent of the gradient rather than trying to
-   out-contrast it. Solid cyan fill with the site's own dark --color-bg
-   as text holds up against both zones (6.59:1) regardless of what's
-   behind the button; the border and shadow give it further definition.
+/* Not gold, not cyan: gold (#f0c000) sits right next to her yellow
+   (#f3db0c) in both hue and lightness, so a gold .btn would nearly
+   disappear wherever it lands on the gradient. Cyan (#00b4f0) worked as
+   a fill but isn't actually in Serenity's palette — a leftover from an
+   earlier direction — and the muted teals/corals that are on-palette
+   land at 1.4–2.2:1 against the gradient, nowhere near the ~3:1 a fill
+   needs for a visible edge. Cream (--color-text) is the only fill that
+   separates cleanly across the whole range (6.74:1 at the blue end,
+   5.50:1 at the deep orange end), and it's already in the palette.
+   --color-ink (#0d3b45) as the fill's text holds 10.29:1 on cream.
    Filled (not just outlined) so .btn reads as the primary action next
    to .btn-outline's transparent secondary — see .btn-outline below. */
 .btn {
   display: inline-block;
-  background-color: var(--color-cyan);
-  border: 2px solid var(--color-cyan);
-  color: var(--color-bg);
+  background-color: var(--color-text);
+  border: 2px solid var(--color-text);
+  color: var(--color-ink);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   padding: calc(0.75rem - 2px) calc(1.5rem - 2px);
   border-radius: 999px;
@@ -184,17 +183,21 @@ p, ul {
   cursor: pointer;
 }
 
+.btn:hover {
+  background-color: #ffffff;
+  border-color: #ffffff;
+}
+
 .btn-outline {
   background-color: transparent;
-  color: var(--color-cyan);
-  border: 2px solid var(--color-cyan);
+  color: var(--color-text);
+  border: 2px solid var(--color-text);
   box-shadow: none;
   padding: calc(0.75rem - 2px) calc(1.5rem - 2px);
 }
 
 .btn-outline:hover {
-  background-color: var(--color-cyan);
-  color: var(--color-bg);
+  background-color: rgba(244, 233, 242, 0.15);
 }
 
 .hero-ctas {
@@ -343,9 +346,9 @@ figure {
   font: inherit;
   padding: 0.5rem 1.25rem;
   border-radius: 999px;
-  border: 2px solid var(--color-cyan);
+  border: 2px solid var(--color-text);
   background-color: transparent;
-  color: var(--color-cyan);
+  color: var(--color-text);
   cursor: pointer;
 }
 
@@ -389,10 +392,13 @@ figure {
   cursor: default;
 }
 
+/* Cream, not the panel-scoped --color-teal: unlike .game-card, this sits
+   as a bare <p> directly on the open gradient (right above
+   .quick-version), not inside a --color-surface panel. */
 .lang-switch {
   display: inline-block;
-  border: 2px solid var(--color-cyan);
-  color: var(--color-cyan);
+  border: 2px solid var(--color-text);
+  color: var(--color-text);
   border-radius: 999px;
   padding: 0.3rem 0.9rem;
   font-size: 0.85rem;
@@ -595,9 +601,9 @@ figure {
   margin: 0.5rem 0;
 }
 
-/* The mailto link inside .form-hint would otherwise inherit the new
-   `p a { color: var(--color-cyan) }` in-prose-link rule — cyan is
-   2.39:1 on this white card, well under the 4.5:1 small-text floor.
+/* The mailto link inside .form-hint would otherwise inherit the
+   `p a { color: var(--color-accent) }` in-prose-link rule — gold is
+   1.71:1 on this white card, well under the 4.5:1 small-text floor.
    Same plum as the labels above instead. */
 .booking-form .form-hint a {
   color: #4a1240;
@@ -702,14 +708,14 @@ figure {
   flex-direction: column;
   gap: 0.5rem;
   background-color: var(--color-surface);
-  border: 1px solid rgba(0, 180, 240, 0.35);
+  border: 1px solid rgba(61, 139, 152, 0.35);
   color: var(--color-text);
   border-radius: 12px;
   padding: 2rem;
 }
 
 .game-card:hover {
-  border-color: var(--color-cyan);
+  border-color: var(--color-teal);
 }
 
 .game-card-title {
