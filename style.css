@@ -119,10 +119,6 @@ h1, h2, h3 {
 }
 
 h1 {
-  /* echoes the banner lettering. Real fallback (not `color: transparent`,
-     which would blind the text in any browser lacking background-clip:
-     text support) — color stays solid gold until -webkit-text-fill-color
-     hides it in browsers that do support the clip. */
   color: var(--color-accent);
   background: linear-gradient(180deg, var(--color-accent), var(--color-accent-2));
   -webkit-background-clip: text;
