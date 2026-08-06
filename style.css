@@ -158,18 +158,7 @@ p, ul {
   line-height: 1.6;
 }
 
-/* Not gold, not cyan: gold (#f0c000) sits right next to her yellow
-   (#f3db0c) in both hue and lightness, so a gold .btn would nearly
-   disappear wherever it lands on the gradient. Cyan (#00b4f0) worked as
-   a fill but isn't actually in Serenity's palette — a leftover from an
-   earlier direction — and the muted teals/corals that are on-palette
-   land at 1.4–2.2:1 against the gradient, nowhere near the ~3:1 a fill
-   needs for a visible edge. Cream (--color-text) is the only fill that
-   separates cleanly across the whole range (6.74:1 at the blue end,
-   5.50:1 at the deep orange end), and it's already in the palette.
-   --color-ink (#0d3b45) as the fill's text holds 10.29:1 on cream.
-   Filled (not just outlined) so .btn reads as the primary action next
-   to .btn-outline's transparent secondary — see .btn-outline below. */
+/
 .btn {
   display: inline-block;
   background-color: var(--color-text);
@@ -257,14 +246,6 @@ footer {
   margin-top: 4rem;
   padding: 1.5rem 2rem;
   border-top: 2px solid var(--color-pink);
-  /* Frosted glass, not a solid box or a fade trick (both tried first,
-     both looked like a hard-edged sticker or a floating panel): the
-     gradient shows through softly, blurred, rather than being hidden
-     or abruptly cut off. 85% opacity on --color-bg is dark enough that
-     text/links stay well above 4.5:1 whether the gradient behind is her
-     orange or her yellow (checked both — muted text 9.40:1 / 7.11:1,
-     gold links 8.43:1 / 6.38:1), while still letting 15% of whatever
-     color is back there read through once blurred. */
   background-color: rgba(16, 38, 43, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -335,8 +316,6 @@ figure {
   margin: 1.5rem 0;
 }
 
-/* Amber is scoped to home + gallery only (.gallery-filters only appears
-   in gallery.html); everywhere else keeps the cyan default. */
 .gallery-filters .filter-btn:hover {
   border-color: var(--color-amber);
   color: var(--color-amber);
@@ -392,9 +371,7 @@ figure {
   cursor: default;
 }
 
-/* Cream, not the panel-scoped --color-teal: unlike .game-card, this sits
-   as a bare <p> directly on the open gradient (right above
-   .quick-version), not inside a --color-surface panel. */
+
 .lang-switch {
   display: inline-block;
   border: 2px solid var(--color-text);
@@ -439,8 +416,6 @@ figure {
   text-decoration: underline;
 }
 
-/* Booking form: styled like the Google Form it replaces, a stack of
-   white question cards under a gold top bar, underlined text fields. */
 
 .booking-form {
   display: flex;
@@ -470,11 +445,7 @@ figure {
 .booking-form legend {
   font-family: 'Fraunces', serif;
   font-size: 1.05rem;
-  /* Fixed deep plum rather than var(--color-accent): these labels sit on
-     white cards regardless of page theme, and the bright accent gold
-     used elsewhere fails contrast on white (1.71:1). Plum/dark-coral
-     here (not brown/red) to keep the white cards in the same palette
-     family as the rest of the site. */
+  
   color: #4a1240;
 }
 
