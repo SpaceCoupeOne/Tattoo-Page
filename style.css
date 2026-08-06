@@ -1,6 +1,6 @@
 :root {
   /* ground — Miami */
-  --color-bg:      #150a1c;
+  --color-bg:      #10262b;
   --color-surface: #241031;
   --color-text:    #f4e9f2;
   --color-muted:   #dfd5e5;
@@ -262,10 +262,10 @@ footer {
      gradient shows through softly, blurred, rather than being hidden
      or abruptly cut off. 85% opacity on --color-bg is dark enough that
      text/links stay well above 4.5:1 whether the gradient behind is her
-     orange or her yellow (checked both — muted text 6.45:1 / 7.99:1,
-     gold links 8.22:1 / 10.18:1), while still letting 15% of whatever
+     orange or her yellow (checked both — muted text 9.40:1 / 7.11:1,
+     gold links 8.43:1 / 6.38:1), while still letting 15% of whatever
      color is back there read through once blurred. */
-  background-color: rgba(21, 10, 28, 0.85);
+  background-color: rgba(16, 38, 43, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 12px;
