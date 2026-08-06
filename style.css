@@ -317,7 +317,7 @@ figure {
 
 .preview-grid img,
 .gallery-grid img {
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
   cursor: zoom-in;
 }
