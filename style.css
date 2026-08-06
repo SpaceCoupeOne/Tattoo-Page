@@ -165,7 +165,7 @@ header {
 
 nav {
   display: flex;
-  gap: 2.5rem;
+  gap: 1.25rem;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
@@ -173,8 +173,18 @@ nav {
 }
 
 nav a {
-  font-size: 1.3rem;
+  display: inline-block;
+  font-size: 1.5rem;
   font-weight: 500;
+  border: 2px solid var(--color-accent);
+  border-radius: 999px;
+  padding: 0.4rem 1.35rem;
+}
+
+nav a:hover {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  text-decoration: none;
 }
 
 .nav-hide {
