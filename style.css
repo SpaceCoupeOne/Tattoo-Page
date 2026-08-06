@@ -13,7 +13,6 @@
   /* atmosphere — Miami */
   --color-cyan:   #00b4f0;
   --color-pink:   #ff69b4;
-  --color-orchid: #c850b4;
 }
 
 html {
@@ -287,62 +286,6 @@ footer p {
 .hero {
   position: relative;
   padding: 6rem 2rem 10rem;
-}
-
-.shape {
-  position: absolute;
-  border-radius: 50%;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.shape-1 {
-  top: -100px;
-  right: -100px;
-  width: 400px;
-  height: 400px;
-  background-color: var(--color-accent-2);
-  opacity: 0.15;
-}
-
-.shape-2 {
-  bottom: -140px;
-  left: 5%;
-  width: 200px;
-  height: 200px;
-  background-color: var(--color-cyan);
-  opacity: 0.15;
-}
-
-.shape-3 {
-  bottom: -110px;
-  left: 25%;
-  width: 140px;
-  height: 140px;
-  background-color: var(--color-amber);
-  opacity: 0.15;
-}
-
-.page-shape-a,
-.page-shape-b {
-  position: fixed;
-  border-radius: 50%;
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* Hidden rather than recolored: these are position:fixed, so they sit
-   in the same corner of the viewport regardless of scroll position,
-   while the html background is now a gradient that shifts from blue to
-   orange to yellow as the page scrolls beneath them. There's no single
-   static color that blends with all of that — whatever's picked will
-   clash with some portion of the gradient (orchid clashed as a purple
-   blob on the orange/yellow zone). They worked as subtle atmosphere
-   against the old, mostly-uniform dark background; they don't against
-   a background that's actively changing hue. */
-.page-shape-a,
-.page-shape-b {
-  display: none;
 }
 
 figure {
@@ -707,16 +650,6 @@ figure {
 }
 
 @media (max-width: 768px) {
-  .page-shape-a {
-    width: 160px;
-    height: 160px;
-  }
-
-  .page-shape-b {
-    width: 140px;
-    height: 140px;
-  }
-
   header {
     align-items: center;
     gap: 0.75rem;
@@ -741,11 +674,6 @@ figure {
   .preview-grid,
   .gallery-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .shape-1 {
-    width: 250px;
-    height: 250px;
   }
 
   .game-menu {
