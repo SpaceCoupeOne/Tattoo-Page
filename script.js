@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   lightboxTriggers.forEach(function (trigger) {
     trigger.addEventListener('click', function () {
       var img = trigger.tagName === 'IMG' ? trigger : trigger.querySelector('img');
-      overlayImg.src = img.src;
+      overlayImg.src = img.dataset.full || img.src;
       overlayImg.alt = img.alt;
       overlay.classList.add('active');
     });
