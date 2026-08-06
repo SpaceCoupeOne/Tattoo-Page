@@ -17,15 +17,6 @@
 }
 
 html {
-  /* Bright end pushed down so it sits behind the footer, not behind
-     body text. On booking.html (the longest page), the last paragraphs
-     were landing on #c98c0c/#f3db0c — ~1.5:1 against --color-text,
-     unreadable. Ramp to yellow now compressed into the last 12%
-     (88–100%) instead of starting at 73%, so body text stays on
-     #9a450d or darker (5.5:1 minimum) and the yellow band lands past
-     the content, under the footer / in the margins outside the 1100px
-     column. One-way fade only (blue → orange → yellow) — no fade-back-
-     to-orange or peak; that caused a horizontal yellow band before. */
   background-image: linear-gradient(180deg,
     #235861 0%, #235861 13%,
     #4a4535 27%,
