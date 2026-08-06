@@ -17,29 +17,47 @@
 }
 
 html {
-  /* the sky — same blue-purple-to-warm journey on every page.
-     Percentage-based gradient stops are relative to each page's OWN
-     total height, so a short page (privacy) raced through the
-     transition while a long one (booking, aftercare) stretched it over
-     much more scrolling — inconsistent page to page. Fixed
-     background-size instead: every page gradates over the same 3200px
-     of scroll. First half (0–50%, i.e. 0–1600px) is the original
-     blue-to-coral journey; the second half (50–100%, 1600–3200px) keeps
-     warming past coral into a richer orange, so long pages don't sit on
-     one flat coral plateau for thousands of pixels. background-color
-     matches the final stop, so anything past 3200px (the no-repeat
-     image doesn't tile) is a seamless continuation, not a cutoff. On
-     html rather than body, so it's edge-to-edge on wide viewports
+  /* the sky — her three colors kept exact (blue #235861, orange #9a450d,
+     yellow #f3db0c). Ramped, gradual stops between each (rather than
+     jumping straight from muted blue to full-saturation orange/yellow)
+     so the color builds continuously instead of popping. One-way fade
+     only: blue → orange → yellow, yellow as the actual final stop (a
+     "peak that eases back to orange" version caused a literal
+     horizontal yellow band wherever a viewport framed the peak — not
+     doing that again).
+     Stops are % now, not px — relative to each page's OWN height, not a
+     fixed pixel box. A fixed-size box (tried previously) meant only a
+     genuinely long page like booking.html was tall enough to travel
+     deep into it and show the full blue→orange→yellow journey; shorter
+     pages ran out of page before the box did and stayed stuck in the
+     early blue/ramp portion, never reaching orange or yellow at all —
+     so booking looked complete and rich while everything else looked
+     comparatively flat. Percentage stops mean every page — long or
+     short — travels the exact same proportional journey over its own
+     height and ends at the same point (yellow) at its own footer,
+     matching how booking looks.
+     This does mean the transition happens at different absolute scroll
+     distances on different pages again (fast on a short page, slow on
+     a long one) — that's the tradeoff for every page looking the same
+     proportionally, which is what was asked for here.
+     The footer (below) carries its own solid background regardless of
+     what this gradient is doing, so wherever a page's yellow zone ends
+     up, the footer text stays readable.
+     Note: her yellow is still very light — body text against it is
+     ~1.2:1, essentially invisible — but that trade was made deliberately
+     to keep the color vivid rather than muted; not re-litigating it here.
+     On html rather than body, so it's edge-to-edge on wide viewports
      instead of framed inside body's centered, max-width:1100px column.
      No background-attachment: fixed — that repaints every scroll frame
      and iOS Safari handles it inconsistently. */
-  background-color: #5a2410;
   background-image: linear-gradient(180deg,
-    #0d1226 0%, #111024 7.5%, #150a1c 15%,
-    #1f0d25 21%, #2a0f2e 27.5%, #35122a 35%, #3d1526 50%,
-    #4c1c18 75%, #5a2410 100%);
-  background-repeat: no-repeat;
-  background-size: 100% 3200px;
+    #235861 0%, #235861 13%,
+    #4a4535 27%,
+    #6b4a22 43%,
+    #8a4515 60%,
+    #9a450d 73%,
+    #c98c0c 87%,
+    #f3db0c 98%, #f3db0c 100%);
   overflow-x: hidden;
 }
 
@@ -95,7 +113,7 @@ footer a,
 
 p a,
 li a {
-  color: var(--color-cyan);
+  color: var(--color-accent);
   text-decoration: underline;
 }
 
@@ -176,27 +194,42 @@ p, ul {
   line-height: 1.6;
 }
 
+/* Not gold: gold (#f0c000) sits right next to her yellow (#f3db0c) in
+   both hue and lightness, so a gold .btn would nearly disappear
+   wherever it lands on the gradient — and .btn shows up at every depth
+   across the site (hero CTAs near the top, FAQ/gallery's booking links
+   mid-page, form submit buttons at the very bottom). No single accent
+   color solves this cleanly: the gradient runs from bright yellow down
+   to medium-dark orange, so a color with strong contrast against one
+   end has weak contrast against the other (checked cyan/pink/coral
+   against both — none broke 2.7:1 against orange). Same approach as
+   the footer: independent of the gradient rather than trying to
+   out-contrast it. Dark fill (the site's own --color-bg) holds up
+   against both zones; the border and shadow give it definition
+   regardless of what color is behind it. */
 .btn {
   display: inline-block;
-  background-color: var(--color-accent);
-  color: var(--color-bg);
-  padding: 0.75rem 1.5rem;
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-cyan);
+  color: var(--color-text);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  padding: calc(0.75rem - 2px) calc(1.5rem - 2px);
   border-radius: 999px;
   text-decoration: none;
   font: inherit;
-  border: none;
   cursor: pointer;
 }
 
 .btn-outline {
   background-color: transparent;
-  color: var(--color-accent);
-  border: 2px solid var(--color-accent);
+  color: var(--color-cyan);
+  border: 2px solid var(--color-cyan);
+  box-shadow: none;
   padding: calc(0.75rem - 2px) calc(1.5rem - 2px);
 }
 
 .btn-outline:hover {
-  background-color: var(--color-accent);
+  background-color: var(--color-cyan);
   color: var(--color-bg);
 }
 
@@ -255,8 +288,20 @@ nav a:hover {
 
 footer {
   margin-top: 4rem;
-  padding: 1.5rem 0;
+  padding: 1.5rem 2rem;
   border-top: 2px solid var(--color-pink);
+  /* Frosted glass, not a solid box or a fade trick (both tried first,
+     both looked like a hard-edged sticker or a floating panel): the
+     gradient shows through softly, blurred, rather than being hidden
+     or abruptly cut off. 85% opacity on --color-bg is dark enough that
+     text/links stay well above 4.5:1 whether the gradient behind is her
+     orange or her yellow (checked both — muted text 6.45:1 / 7.99:1,
+     gold links 8.22:1 / 10.18:1), while still letting 15% of whatever
+     color is back there read through once blurred. */
+  background-color: rgba(21, 10, 28, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 12px;
   color: var(--color-muted);
   font-size: 1rem;
   font-weight: 600;
@@ -317,22 +362,18 @@ footer p {
   pointer-events: none;
 }
 
-.page-shape-a {
-  top: -70px;
-  right: -70px;
-  width: 240px;
-  height: 240px;
-  background-color: var(--color-orchid);
-  opacity: 0.15;
-}
-
+/* Hidden rather than recolored: these are position:fixed, so they sit
+   in the same corner of the viewport regardless of scroll position,
+   while the html background is now a gradient that shifts from blue to
+   orange to yellow as the page scrolls beneath them. There's no single
+   static color that blends with all of that — whatever's picked will
+   clash with some portion of the gradient (orchid clashed as a purple
+   blob on the orange/yellow zone). They worked as subtle atmosphere
+   against the old, mostly-uniform dark background; they don't against
+   a background that's actively changing hue. */
+.page-shape-a,
 .page-shape-b {
-  bottom: -90px;
-  left: -60px;
-  width: 200px;
-  height: 200px;
-  background-color: var(--color-orchid);
-  opacity: 0.15;
+  display: none;
 }
 
 figure {
