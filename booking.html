@@ -176,9 +176,15 @@
         <p class="form-hint">This is used only to plan your session safely. It is not shared with anyone and is deleted once your appointment is complete.</p>
       </div>
 
-      <div class="form-field">
-        <label for="field-allergies">Do you have any allergies? If so, please specify. <span class="required">*</span></label>
-        <textarea id="field-allergies" name="allergies" rows="3" required></textarea>
+      <fieldset class="form-field">
+        <legend>Do you have any allergies? <span class="required">*</span></legend>
+        <label class="form-radio"><input type="radio" name="has_allergies" value="Yes" required id="allergies-yes"> Yes</label>
+        <label class="form-radio"><input type="radio" name="has_allergies" value="No" required id="allergies-no"> No</label>
+      </fieldset>
+
+      <div class="form-field" id="allergies-followup" hidden>
+        <label for="field-allergies">Please specify your allergies.</label>
+        <textarea id="field-allergies" name="allergies" rows="3"></textarea>
         <p class="form-hint">This is used only to plan your session safely. It is not shared with anyone and is deleted once your appointment is complete.</p>
       </div>
 
@@ -277,6 +283,20 @@
 
       coverupYes.addEventListener('change', toggleCoverupFollowup);
       coverupNo.addEventListener('change', toggleCoverupFollowup);
+
+      var allergiesYes = document.getElementById('allergies-yes');
+      var allergiesNo = document.getElementById('allergies-no');
+      var allergiesFollowup = document.getElementById('allergies-followup');
+      var allergiesField = document.getElementById('field-allergies');
+
+      function toggleAllergiesFollowup() {
+        var show = allergiesYes.checked;
+        allergiesFollowup.hidden = !show;
+        allergiesField.required = show;
+      }
+
+      allergiesYes.addEventListener('change', toggleAllergiesFollowup);
+      allergiesNo.addEventListener('change', toggleAllergiesFollowup);
 
       form.addEventListener('submit', function (e) {
         if (!form.reportValidity()) {
