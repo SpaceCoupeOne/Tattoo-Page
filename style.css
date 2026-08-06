@@ -171,14 +171,16 @@ p, ul {
    end has weak contrast against the other (checked cyan/pink/coral
    against both — none broke 2.7:1 against orange). Same approach as
    the footer: independent of the gradient rather than trying to
-   out-contrast it. Dark fill (the site's own --color-bg) holds up
-   against both zones; the border and shadow give it definition
-   regardless of what color is behind it. */
+   out-contrast it. Solid cyan fill with the site's own dark --color-bg
+   as text holds up against both zones (6.59:1) regardless of what's
+   behind the button; the border and shadow give it further definition.
+   Filled (not just outlined) so .btn reads as the primary action next
+   to .btn-outline's transparent secondary — see .btn-outline below. */
 .btn {
   display: inline-block;
-  background-color: var(--color-bg);
+  background-color: var(--color-cyan);
   border: 2px solid var(--color-cyan);
-  color: var(--color-text);
+  color: var(--color-bg);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
   padding: calc(0.75rem - 2px) calc(1.5rem - 2px);
   border-radius: 999px;
