@@ -17,47 +17,23 @@
 }
 
 html {
-  /* the sky — her three colors kept exact (blue #235861, orange #9a450d,
-     yellow #f3db0c). Ramped, gradual stops between each (rather than
-     jumping straight from muted blue to full-saturation orange/yellow)
-     so the color builds continuously instead of popping. One-way fade
-     only: blue → orange → yellow, yellow as the actual final stop (a
-     "peak that eases back to orange" version caused a literal
-     horizontal yellow band wherever a viewport framed the peak — not
-     doing that again).
-     Stops are % now, not px — relative to each page's OWN height, not a
-     fixed pixel box. A fixed-size box (tried previously) meant only a
-     genuinely long page like booking.html was tall enough to travel
-     deep into it and show the full blue→orange→yellow journey; shorter
-     pages ran out of page before the box did and stayed stuck in the
-     early blue/ramp portion, never reaching orange or yellow at all —
-     so booking looked complete and rich while everything else looked
-     comparatively flat. Percentage stops mean every page — long or
-     short — travels the exact same proportional journey over its own
-     height and ends at the same point (yellow) at its own footer,
-     matching how booking looks.
-     This does mean the transition happens at different absolute scroll
-     distances on different pages again (fast on a short page, slow on
-     a long one) — that's the tradeoff for every page looking the same
-     proportionally, which is what was asked for here.
-     The footer (below) carries its own solid background regardless of
-     what this gradient is doing, so wherever a page's yellow zone ends
-     up, the footer text stays readable.
-     Note: her yellow is still very light — body text against it is
-     ~1.2:1, essentially invisible — but that trade was made deliberately
-     to keep the color vivid rather than muted; not re-litigating it here.
-     On html rather than body, so it's edge-to-edge on wide viewports
-     instead of framed inside body's centered, max-width:1100px column.
-     No background-attachment: fixed — that repaints every scroll frame
-     and iOS Safari handles it inconsistently. */
+  /* Bright end pushed down so it sits behind the footer, not behind
+     body text. On booking.html (the longest page), the last paragraphs
+     were landing on #c98c0c/#f3db0c — ~1.5:1 against --color-text,
+     unreadable. Ramp to yellow now compressed into the last 12%
+     (88–100%) instead of starting at 73%, so body text stays on
+     #9a450d or darker (5.5:1 minimum) and the yellow band lands past
+     the content, under the footer / in the margins outside the 1100px
+     column. One-way fade only (blue → orange → yellow) — no fade-back-
+     to-orange or peak; that caused a horizontal yellow band before. */
   background-image: linear-gradient(180deg,
     #235861 0%, #235861 13%,
     #4a4535 27%,
-    #6b4a22 43%,
-    #8a4515 60%,
-    #9a450d 73%,
-    #c98c0c 87%,
-    #f3db0c 98%, #f3db0c 100%);
+    #6b4a22 45%,
+    #8a4515 65%,
+    #9a450d 88%,
+    #c98c0c 96%,
+    #f3db0c 100%);
   overflow-x: hidden;
 }
 
