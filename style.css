@@ -320,6 +320,17 @@ figure {
   color: var(--color-amber);
 }
 
+/* Amber, not the site-wide pink .filter-btn.active: pink is a leftover
+   Miami-palette accent that no longer matches the cream/gold/teal
+   direction, and gallery already has its own amber for :hover above.
+   Scoped to .gallery-filters so mandala's symmetry picker (which reuses
+   .filter-btn.active) is untouched. */
+.gallery-filters .filter-btn.active {
+  background-color: var(--color-amber);
+  border-color: var(--color-amber);
+  color: var(--color-bg);
+}
+
 .filter-btn {
   font: inherit;
   padding: 0.5rem 1.25rem;
