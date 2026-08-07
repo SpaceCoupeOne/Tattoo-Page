@@ -60,8 +60,8 @@
         <button class="swatch" data-color="#3d8b98" style="background:#3d8b98" aria-label="Teal"></button>
         <button class="swatch" data-color="#00b4f0" style="background:#00b4f0" aria-label="Cyan"></button>
         <button class="swatch" data-color="#8338ec" style="background:#8338ec" aria-label="Purple"></button>
-        <button class="swatch" data-color="#dfd5e5" style="background:#dfd5e5" aria-label="Lavender"></button>
-        <button class="swatch" data-color="#f4e9f2" style="background:#f4e9f2" aria-label="Cream"></button>
+        <button class="swatch" data-color="#e63946" style="background:#e63946" aria-label="Red"></button>
+        <button class="swatch" data-color="#ff5da2" style="background:#ff5da2" aria-label="Pink"></button>
         <button class="swatch" data-color="#ffffff" style="background:#ffffff" aria-label="Eraser"></button>
       </div>
       <div class="coloring-actions">
@@ -164,8 +164,8 @@
       // fill happens - 1 where a pixel is stroke/ink, 0 where it's fillable.
       // Boundaries are checked against this static mask, never against the
       // live (possibly already-filled) canvas: several palette colors
-      // (black, brown, coral, teal, cyan, purple) are themselves darker than
-      // DARK_THRESHOLD, so checking live pixel color would make a region
+      // (black, brown, red, coral, teal, cyan, purple) are themselves darker
+      // than DARK_THRESHOLD, so checking live pixel color would make a region
       // permanently un-refillable the moment it's filled with one of those -
       // a click to change its color would read as "clicked a stroke" and
       // silently do nothing.
