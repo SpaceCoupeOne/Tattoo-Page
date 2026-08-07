@@ -5,9 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Coloring Book | Serenity Bliss Tattoos</title>
-  <meta name="description" content="Color in a flash-style flower design with your own palette.">
+  <meta name="description" content="Color in one of Serenity's flash designs with your own palette.">
   <meta property="og:title" content="Coloring Book | Serenity Bliss Tattoos">
-  <meta property="og:description" content="Color in a flash-style flower design with your own palette.">
+  <meta property="og:description" content="Color in one of Serenity's flash designs with your own palette.">
   <link rel="icon" type="image/png" href="fish-favicon.png">
   <link rel="canonical" href="https://serenitybliss.tattoo/coloring">
   <link rel="stylesheet" href="style.css">
@@ -37,46 +37,37 @@
 
   <h2>Coloring Book</h2>
   <p><a href="games.html">&larr; Back to Games</a></p>
-  <p>Pick a color, then click a section of the flower to fill it in.</p>
+  <p>Pick a design, pick a color, then click a section to fill it in.</p>
 
   <div class="coloring-wrap">
 
-    <div class="coloring-svg-wrap">
-      <svg id="coloring-svg" viewBox="0 0 400 380" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="200" cy="190" r="175" fill="none" stroke="#1b1912" stroke-width="2" stroke-dasharray="6 6"></circle>
+    <div class="coloring-main">
+      <div class="coloring-picker" id="coloring-picker"></div>
 
-        <circle class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="70" cy="70" r="10"></circle>
-        <circle class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="330" cy="70" r="10"></circle>
-        <circle class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="70" cy="330" r="8"></circle>
-        <circle class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="330" cy="330" r="8"></circle>
-
-        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="200" cy="150" rx="35" ry="65" transform="rotate(0 200 220)"></ellipse>
-        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="200" cy="150" rx="35" ry="65" transform="rotate(72 200 220)"></ellipse>
-        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="200" cy="150" rx="35" ry="65" transform="rotate(144 200 220)"></ellipse>
-        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="200" cy="150" rx="35" ry="65" transform="rotate(216 200 220)"></ellipse>
-        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="200" cy="150" rx="35" ry="65" transform="rotate(288 200 220)"></ellipse>
-
-        <circle class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="200" cy="220" r="28"></circle>
-
-        <rect class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" x="196" y="245" width="8" height="95" rx="4"></rect>
-
-        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="172" cy="292" rx="30" ry="15" transform="rotate(-25 172 292)"></ellipse>
-        <ellipse class="fillable" fill="#ffffff" stroke="#1b1912" stroke-width="3" cx="228" cy="305" rx="30" ry="15" transform="rotate(25 228 305)"></ellipse>
-      </svg>
+      <div class="coloring-canvas-wrap">
+        <canvas id="coloring-canvas" width="760" height="1000"></canvas>
+      </div>
     </div>
 
     <div class="coloring-controls">
       <div class="palette">
         <button class="swatch" data-color="#1b1912" style="background:#1b1912" aria-label="Black"></button>
-        <button class="swatch" data-color="#c0392b" style="background:#c0392b" aria-label="Red"></button>
-        <button class="swatch" data-color="#d4a017" style="background:#d4a017" aria-label="Gold"></button>
-        <button class="swatch" data-color="#1b6b52" style="background:#1b6b52" aria-label="Teal"></button>
-        <button class="swatch" data-color="#6c3483" style="background:#6c3483" aria-label="Purple"></button>
         <button class="swatch" data-color="#59391b" style="background:#59391b" aria-label="Brown"></button>
-        <button class="swatch" data-color="#e8a5c4" style="background:#e8a5c4" aria-label="Pink"></button>
+        <button class="swatch active" data-color="#f0c000" style="background:#f0c000" aria-label="Gold"></button>
+        <button class="swatch" data-color="#f0a050" style="background:#f0a050" aria-label="Amber"></button>
+        <button class="swatch" data-color="#f04830" style="background:#f04830" aria-label="Coral"></button>
+        <button class="swatch" data-color="#06d6a0" style="background:#06d6a0" aria-label="Green"></button>
+        <button class="swatch" data-color="#3d8b98" style="background:#3d8b98" aria-label="Teal"></button>
+        <button class="swatch" data-color="#00b4f0" style="background:#00b4f0" aria-label="Cyan"></button>
+        <button class="swatch" data-color="#8338ec" style="background:#8338ec" aria-label="Purple"></button>
+        <button class="swatch" data-color="#dfd5e5" style="background:#dfd5e5" aria-label="Lavender"></button>
+        <button class="swatch" data-color="#f4e9f2" style="background:#f4e9f2" aria-label="Cream"></button>
         <button class="swatch" data-color="#ffffff" style="background:#ffffff" aria-label="Eraser"></button>
       </div>
-      <button id="reset-coloring" class="btn">Clear</button>
+      <div class="coloring-actions">
+        <button id="undo-coloring" class="btn-outline" type="button">Undo</button>
+        <button id="reset-coloring" class="btn" type="button">Clear</button>
+      </div>
     </div>
 
   </div>
@@ -91,32 +82,229 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      var currentColor = '#c0392b';
-      var swatches = document.querySelectorAll('.swatch');
-      var shapes = document.querySelectorAll('.fillable');
-      var resetBtn = document.getElementById('reset-coloring');
+      var DESIGNS = [
+        { id: 'butterfly-rose', name: 'Butterfly & Rose', file: 'butterfly-rose.png' },
+        { id: 'horseshoe-sunflower', name: 'Horseshoe & Sunflower', file: 'horseshoe-sunflower.png' },
+        { id: 'mandala-flowers', name: 'Mandala Flowers', file: 'mandala-flowers.png' },
+        { id: 'books-spider', name: 'Books & Spider', file: 'books-spider.png' },
+        { id: 'ladybugs', name: 'Ladybug', file: 'ladybugs.png' },
+        { id: 'palette-brushes', name: 'Palette & Brushes', file: 'palette-brushes.png' }
+      ];
 
-      swatches.forEach(function (swatch) {
+      var DARK_THRESHOLD = 140;   // luminance below this = a stroke, not a fillable region
+      var MAX_UNDO = 20;
+      var MAX_FILL_FRACTION = 0.4; // a single fill covering more than this % of the canvas is treated as a leak
+
+      var canvas = document.getElementById('coloring-canvas');
+      var ctx = canvas.getContext('2d', { willReadFrequently: true });
+      var pickerEl = document.getElementById('coloring-picker');
+      var resetBtn = document.getElementById('reset-coloring');
+      var undoBtn = document.getElementById('undo-coloring');
+
+      var currentColor = [240, 192, 0]; // matches the default-active gold swatch
+      var undoStack = [];
+      var currentImage = null;
+      var currentStrokeMask = null;
+
+      function hexToRgb(hex) {
+        hex = hex.replace('#', '');
+        return [
+          parseInt(hex.substring(0, 2), 16),
+          parseInt(hex.substring(2, 4), 16),
+          parseInt(hex.substring(4, 6), 16)
+        ];
+      }
+
+      // Canvas loads go through fm=png (not the site's usual webp) and skip the
+      // width param entirely: these PNGs are already pure black/white with no
+      // anti-aliasing, and the flood fill below depends on that staying true.
+      // Lossy webp re-encoding or a CDN resize would reintroduce the soft grey
+      // edge pixels the prep pipeline was built to remove, giving the fill
+      // gaps to leak through. Thumbnails never get flood-filled, so they use
+      // the same webp+width treatment as every other image on the site.
+      function cdnUrl(file, opts) {
+        var url = '/.netlify/images?url=/Coloring/' + file;
+        if (opts && opts.w) url += '&w=' + opts.w;
+        url += '&fm=' + ((opts && opts.fm) || 'png');
+        return url;
+      }
+
+      function updateUndoState() {
+        undoBtn.disabled = undoStack.length === 0;
+      }
+
+      function loadDesign(design) {
+        var img = new Image();
+        img.onload = function () {
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          ctx.drawImage(img, 0, 0);
+          canvas.setAttribute('aria-label', design.name + ' coloring page');
+          currentImage = img;
+          currentStrokeMask = buildStrokeMask(ctx.getImageData(0, 0, canvas.width, canvas.height));
+          undoStack = [];
+          updateUndoState();
+        };
+        img.src = cdnUrl(design.file, { fm: 'png' });
+      }
+
+      function resetCanvas() {
+        if (!currentImage) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(currentImage, 0, 0);
+        undoStack = [];
+        updateUndoState();
+      }
+
+      function luminance(r, g, b) {
+        return 0.299 * r + 0.587 * g + 0.114 * b;
+      }
+
+      // Captured once per loaded design, from the pristine pixels before any
+      // fill happens - 1 where a pixel is stroke/ink, 0 where it's fillable.
+      // Boundaries are checked against this static mask, never against the
+      // live (possibly already-filled) canvas: several palette colors
+      // (black, brown, coral, teal, cyan, purple) are themselves darker than
+      // DARK_THRESHOLD, so checking live pixel color would make a region
+      // permanently un-refillable the moment it's filled with one of those -
+      // a click to change its color would read as "clicked a stroke" and
+      // silently do nothing.
+      function buildStrokeMask(imageData) {
+        var width = imageData.width;
+        var height = imageData.height;
+        var data = imageData.data;
+        var mask = new Uint8Array(width * height);
+        for (var i = 0, p = 0; i < mask.length; i++, p += 4) {
+          mask[i] = luminance(data[p], data[p + 1], data[p + 2]) < DARK_THRESHOLD ? 1 : 0;
+        }
+        return mask;
+      }
+
+      // Boundary fill, not classic same-color fill: it spreads through any
+      // non-stroke pixel regardless of its current color and stops only at
+      // the stroke mask. That lets a click recolor a region that's already
+      // been filled once, the same way a real coloring book works.
+      function floodFill(imageData, strokeMask, startX, startY, fillRGB, maxAllowed) {
+        var width = imageData.width;
+        var height = imageData.height;
+        var data = imageData.data;
+        var startPixel = startY * width + startX;
+
+        if (strokeMask[startPixel]) return 0;
+
+        var visited = new Uint8Array(width * height);
+        var stack = [startPixel];
+        visited[startPixel] = 1;
+        var count = 0;
+
+        while (stack.length) {
+          var idx = stack.pop();
+          var x = idx % width;
+          var y = (idx / width) | 0;
+          var pIdx = idx * 4;
+
+          data[pIdx] = fillRGB[0];
+          data[pIdx + 1] = fillRGB[1];
+          data[pIdx + 2] = fillRGB[2];
+          data[pIdx + 3] = 255;
+          count++;
+
+          if (count > maxAllowed) return count;
+
+          tryPush(x - 1, y);
+          tryPush(x + 1, y);
+          tryPush(x, y - 1);
+          tryPush(x, y + 1);
+        }
+
+        return count;
+
+        function tryPush(nx, ny) {
+          if (nx < 0 || nx >= width || ny < 0 || ny >= height) return;
+          var nIdx = ny * width + nx;
+          if (visited[nIdx] || strokeMask[nIdx]) return;
+          visited[nIdx] = 1;
+          stack.push(nIdx);
+        }
+      }
+
+      function getCanvasPoint(e) {
+        var rect = canvas.getBoundingClientRect();
+        var scaleX = canvas.width / rect.width;
+        var scaleY = canvas.height / rect.height;
+        var x = Math.floor((e.clientX - rect.left) * scaleX);
+        var y = Math.floor((e.clientY - rect.top) * scaleY);
+        x = Math.max(0, Math.min(canvas.width - 1, x));
+        y = Math.max(0, Math.min(canvas.height - 1, y));
+        return { x: x, y: y };
+      }
+
+      function handleFillClick(e) {
+        if (!currentImage || !currentStrokeMask) return;
+        var pt = getCanvasPoint(e);
+        var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        var before = new ImageData(new Uint8ClampedArray(imageData.data), imageData.width, imageData.height);
+        var maxAllowed = Math.floor(canvas.width * canvas.height * MAX_FILL_FRACTION);
+
+        var filledCount = floodFill(imageData, currentStrokeMask, pt.x, pt.y, currentColor, maxAllowed);
+
+        if (filledCount === 0) return;          // clicked a stroke, nothing to fill
+        if (filledCount > maxAllowed) return;    // leak guard: discard, canvas untouched
+
+        undoStack.push(before);
+        if (undoStack.length > MAX_UNDO) undoStack.shift();
+        ctx.putImageData(imageData, 0, 0);
+        updateUndoState();
+      }
+
+      function handleUndo() {
+        if (!undoStack.length) return;
+        var prev = undoStack.pop();
+        ctx.putImageData(prev, 0, 0);
+        updateUndoState();
+      }
+
+      canvas.addEventListener('click', handleFillClick);
+      resetBtn.addEventListener('click', resetCanvas);
+      undoBtn.addEventListener('click', handleUndo);
+
+      document.querySelectorAll('.palette .swatch').forEach(function (swatch) {
         swatch.addEventListener('click', function () {
-          currentColor = swatch.dataset.color;
-          swatches.forEach(function (s) { s.classList.remove('active'); });
+          currentColor = hexToRgb(swatch.dataset.color);
+          document.querySelectorAll('.palette .swatch').forEach(function (s) {
+            s.classList.remove('active');
+          });
           swatch.classList.add('active');
         });
       });
 
-      shapes.forEach(function (shape) {
-        shape.addEventListener('click', function () {
-          shape.setAttribute('fill', currentColor);
+      DESIGNS.forEach(function (design, i) {
+        var thumb = document.createElement('button');
+        thumb.type = 'button';
+        thumb.className = 'design-thumb';
+        thumb.setAttribute('aria-label', design.name);
+        thumb.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
+        if (i === 0) thumb.classList.add('active');
+
+        var img = document.createElement('img');
+        img.src = cdnUrl(design.file, { w: 140, fm: 'webp' });
+        img.alt = '';
+        thumb.appendChild(img);
+
+        thumb.addEventListener('click', function () {
+          document.querySelectorAll('.design-thumb').forEach(function (t) {
+            t.classList.remove('active');
+            t.setAttribute('aria-pressed', 'false');
+          });
+          thumb.classList.add('active');
+          thumb.setAttribute('aria-pressed', 'true');
+          loadDesign(design);
         });
+
+        pickerEl.appendChild(thumb);
       });
 
-      resetBtn.addEventListener('click', function () {
-        shapes.forEach(function (shape) {
-          shape.setAttribute('fill', '#ffffff');
-        });
-      });
-
-      swatches[1].classList.add('active');
+      loadDesign(DESIGNS[0]);
     });
   </script>
 
