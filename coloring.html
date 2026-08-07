@@ -5,9 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Coloring Book | Serenity Bliss Tattoos</title>
-  <meta name="description" content="Color in one of Serenity's flash designs with your own palette.">
+  <meta name="description" content="Color in a classic flash design with your own palette.">
   <meta property="og:title" content="Coloring Book | Serenity Bliss Tattoos">
-  <meta property="og:description" content="Color in one of Serenity's flash designs with your own palette.">
+  <meta property="og:description" content="Color in a classic flash design with your own palette.">
   <link rel="icon" type="image/png" href="fish-favicon.png">
   <link rel="canonical" href="https://serenitybliss.tattoo/coloring">
   <link rel="stylesheet" href="style.css">
@@ -45,7 +45,7 @@
       <div class="coloring-picker" id="coloring-picker"></div>
 
       <div class="coloring-canvas-wrap">
-        <canvas id="coloring-canvas" width="760" height="1000"></canvas>
+        <canvas id="coloring-canvas" width="680" height="1000"></canvas>
       </div>
     </div>
 
@@ -83,12 +83,12 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var DESIGNS = [
-        { id: 'butterfly-rose', name: 'Butterfly & Rose', file: 'butterfly-rose.png' },
-        { id: 'horseshoe-sunflower', name: 'Horseshoe & Sunflower', file: 'horseshoe-sunflower.png' },
-        { id: 'mandala-flowers', name: 'Mandala Flowers', file: 'mandala-flowers.png' },
-        { id: 'books-spider', name: 'Books & Spider', file: 'books-spider.png' },
-        { id: 'ladybugs', name: 'Ladybug', file: 'ladybugs.png' },
-        { id: 'palette-brushes', name: 'Palette & Brushes', file: 'palette-brushes.png' }
+        { id: 'dragon', name: 'Dragon', file: 'dragon.png' },
+        { id: 'koi', name: 'Koi', file: 'koi.png' },
+        { id: 'roses', name: 'Roses', file: 'roses.png' },
+        { id: 'dagger-roses', name: 'Dagger & Roses', file: 'dagger-roses.png' },
+        { id: 'panther', name: 'Panther', file: 'panther.png' },
+        { id: 'stained-glass-window', name: 'Stained Glass Window', file: 'stained-glass-window.png' }
       ];
 
       var DARK_THRESHOLD = 140;   // luminance below this = a stroke, not a fillable region
