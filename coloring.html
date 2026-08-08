@@ -93,7 +93,14 @@
 
       var DARK_THRESHOLD = 140;   // luminance below this = a stroke, not a fillable region
       var MAX_UNDO = 20;
-      var MAX_FILL_FRACTION = 0.4; // a single fill covering more than this % of the canvas is treated as a leak
+      // A single fill covering more than this % of the canvas is treated as a
+      // leak (fill escaped through a gap in the linework) and discarded.
+      // 0.4 was too tight: several designs have a wide-open background that's
+      // legitimately one connected region well past 40% (Panther's is 63%,
+      // Dagger & Roses' is 58%) - those clicks were being silently rejected
+      // as false-positive leaks. 0.75 still catches a real leak, which merges
+      // the subject and background into one near-total-canvas blob.
+      var MAX_FILL_FRACTION = 0.75;
 
       var canvas = document.getElementById('coloring-canvas');
       var ctx = canvas.getContext('2d', { willReadFrequently: true });

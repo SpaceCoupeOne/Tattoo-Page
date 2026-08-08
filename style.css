@@ -128,6 +128,7 @@ nav a:hover {
 
 h1, h2, h3 {
   font-family: 'Fraunces', serif;
+  scroll-margin-top: 1.5rem;
 }
 
 h1 {
@@ -652,6 +653,13 @@ figure {
   max-width: 700px;
 }
 
+.game-menu {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
 @media (max-width: 768px) {
   header {
     align-items: center;
@@ -659,19 +667,20 @@ figure {
     padding: 1rem 0;
   }
 
-  header h1 {
-    font-size: 1.4rem;
-  }
-
   .site-logo {
-    width: 220px;
-    max-width: 60vw;
+    width: 100%;
+    max-width: 100%;
     height: auto;
   }
 
   nav {
-    gap: 1rem;
+    gap: 0.6rem;
     width: 100%;
+  }
+
+  nav a {
+    font-size: 1.1rem;
+    padding: 0.7rem 0.75rem;
   }
 
   .preview-grid,
@@ -691,18 +700,33 @@ figure {
   }
 
   .hero {
-    padding: 4rem 1.5rem 6rem;
+    padding: 2rem 0 3rem;
+  }
+
+  body {
+    padding: 0 1rem 3rem;
+  }
+
+  .callout {
+    padding: 1rem 1.1rem;
+  }
+
+  .callout ul {
+    padding-left: 1.1rem;
+  }
+
+  /* .quick-version is the aftercare page's own callout box — same
+     wasted-inset problem as .callout, wasn't covered by that rule. */
+  .quick-version {
+    padding: 1rem 1.1rem;
+  }
+
+  .quick-version ul {
+    padding-left: 1.1rem;
   }
 }
 
 /* Games hub */
-
-.game-menu {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  margin-top: 2rem;
-}
 
 .game-card {
   display: flex;
