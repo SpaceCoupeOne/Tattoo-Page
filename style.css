@@ -134,8 +134,9 @@ nav a:hover {
 }
 
 h1, h2, h3 {
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 0.02em;
+  font-family: 'Fraunces', serif;
+  font-weight: 550;
+  font-variation-settings: 'SOFT' 40, 'WONK' 1;
   scroll-margin-top: 1.5rem;
 }
 
@@ -483,8 +484,7 @@ figure {
 .booking-form label,
 .booking-form legend {
   /* Work Sans, not the heading font: these are form instructions people
-     have to actually read, not display text - Bebas Neue's condensed
-     all-caps look works for short titles but hurts here. */
+     have to actually read, not display text. */
   font-family: 'Work Sans', sans-serif;
   font-weight: 600;
   font-size: 1.05rem;
@@ -572,9 +572,8 @@ figure {
 .form-step-title {
   background-color: var(--color-accent);
   color: var(--color-bg);
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 0.02em;
-  font-size: 1.3rem;
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   margin: 0;
@@ -689,9 +688,8 @@ figure {
 }
 
 .game-card-title {
-  font-family: 'Bebas Neue', sans-serif;
-  letter-spacing: 0.02em;
-  font-size: 1.5rem;
+  font-family: 'Fraunces', serif;
+  font-size: 1.3rem;
   color: var(--color-accent);
   margin: 0;
 }
@@ -1018,7 +1016,7 @@ figure {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: 'Fraunces', serif;
   font-size: 1.6rem;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
 }
