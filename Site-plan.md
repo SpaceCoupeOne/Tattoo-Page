@@ -85,11 +85,14 @@ phone number. Supplied: 6751 Fairmont Pkwy, Pasadena, TX 77505 / (281) 416-4874.
 **Scope:** every page currently has the same `h1` — the logo image. No page has
 a text `h1`. Titles carry the keywords, headings carry nothing.
 
-- [ ] On every page, change `<h1><img class="site-logo" ...></h1>` to
+- [x] On every page, change `<h1><img class="site-logo" ...></h1>` to
       `<a href="index.html"><img class="site-logo" ...></a>`. On `index.html`
       the logo is not currently wrapped in a link; every other page wraps the
-      `h1` in one. Normalize them all.
-- [ ] Promote each page's `<h2>` page title to `<h1>`, rewritten for search
+      `h1` in one. Normalize them all. Done on 18 pages. `reflections.html`
+      left as-is (hands-off per CLAUDE.md — logo is still `h1`-wrapped there).
+      `links.html` wasn't in the plan's page list but was in scope (same
+      header pattern) — normalized too.
+- [x] Promote each page's `<h2>` page title to `<h1>`, rewritten for search
       intent:
       - `index.html` → Custom Tattoos in Pasadena, TX
       - `gallery.html` → Tattoo Portfolio
@@ -98,14 +101,29 @@ a text `h1`. Titles carry the keywords, headings carry nothing.
       - `faq.html` → Tattoo FAQ, Pricing & Policies
       - `aftercare.html` → Tattoo Aftercare Instructions
       - the rest keep their current wording, just promoted
-- [ ] Fix the CSS fallout. The `h1` rule currently carries the gold gradient and
-      `.site-logo` sits inside it. After this change the `h1` rule styles text,
-      and `.site-logo` needs its own rule outside the `h1` context. The existing
-      `h2` gradient rule is the reference for what the new `h1` should look like.
+      `links.html` had no `<h2>` title to promote (it's a link-hub page, not
+      in the plan's list) — added a new `<h1>Serenity Bliss Tattoos</h1>`
+      after the logo, owner's choice over "Quick Links" or a sr-only h1.
+      `reflections.html` untouched (hands-off): still has no text h1.
+- [x] Fix the CSS fallout. `h1` and `h2` now share one gradient rule (135deg,
+      the old h2 formula) since both hold real page-title text now — the old
+      180deg gradient was tuned for the logo `<img>` wrapper, which
+      `background-clip: text` never actually affected. `.site-logo` keeps its
+      own plain rule, now sitting in a plain `<a>` instead of inside `h1`.
+      Also added `h1` to the `max-width: 700px` measure rule alongside
+      `h2, h3, p, ul` — it had been dropped from that list implicitly since
+      page titles used to be `h2`.
 
 **Done when:** every page has exactly one `h1`, it is text not an image, the
 logo still links home, and nothing looks different visually except the page
-title styling.
+title styling. Verified structurally (grep: every page has exactly 1 `h1`/`h2`
+balanced tag pair, no page still wraps the logo in `h1` except the hands-off
+`reflections.html`). **Not verified visually** — no browser/screenshot tooling
+available in this environment (no Node, no working Python, no headless
+Chromium). Two spots worth an eyeball in Live Server before calling this done:
+header spacing around the logo (it lost `h1`'s default block margin when
+unwrapped, so it may sit slightly closer to the nav than before), and the new
+`h1` page titles at their larger/gradient styling on each page.
 
 ---
 

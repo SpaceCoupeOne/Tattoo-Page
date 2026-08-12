@@ -140,9 +140,14 @@ h1, h2, h3 {
   scroll-margin-top: 1.5rem;
 }
 
-h1 {
+/* h1 used to wrap the logo image and carried a gradient tuned for that
+   (180deg, and background-clip:text had no effect on an <img> anyway).
+   h1 now holds real page-title text, same job as h2, so they share one
+   gold-to-coral gradient rule. .site-logo is its own plain rule for the
+   image, sitting in a plain <a> instead. */
+h1, h2 {
   color: var(--color-accent);
-  background: linear-gradient(180deg, var(--color-accent), var(--color-accent-2));
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -154,19 +159,11 @@ h1 {
   height: auto;
 }
 
-h2 {
-  color: var(--color-accent);
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
 h3 {
   color: var(--color-accent);
 }
 
-h2, h3, p, ul {
+h1, h2, h3, p, ul {
   max-width: 700px;
 }
 
