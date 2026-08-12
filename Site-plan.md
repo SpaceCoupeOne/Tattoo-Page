@@ -45,24 +45,38 @@ location owner, so a Google Business Profile is not an option. Schema is how
 Google learns this is a real business at a real address.
 
 **Blocked until the owner supplies:** studio street address, zip, and studio
-phone number.
+phone number. Supplied: 6751 Fairmont Pkwy, Pasadena, TX 77505 / (281) 416-4874.
 
-- [ ] Build a footer NAP block — business name, street address, city/state/zip,
+- [x] Build a footer NAP block — business name, street address, city/state/zip,
       phone — and apply it identically to all 20 pages, above the existing
-      Location/Email/Instagram lines.
-- [ ] Add a JSON-LD `<script type="application/ld+json">` block to
+      Location/Email/Instagram lines. Applied to 19 pages
+      (`reflections-preview.html` excluded — hands-off per CLAUDE.md).
+- [x] Add a JSON-LD `<script type="application/ld+json">` block to
       `index.html`: `@type: TattooParlor` with `name`, `address` as a nested
       `PostalAddress`, `telephone`, `url`, `image`, `sameAs` pointing at the
       Instagram profile, `priceRange`, and `areaServed` listing Pasadena,
-      Deer Park, La Porte, Pearland, South Houston, and Houston.
-- [ ] Add a nested or sibling `Person` entry for the artist.
-- [ ] Add a `FAQPage` JSON-LD block to `faq.html` built from the questions
+      Deer Park, La Porte, Pearland, South Houston, and Houston. `priceRange`
+      set to `$$` (symbolic) rather than a dollar figure — no confirmed
+      session-total pricing exists yet; revisit once Session 4 supplies a
+      real price anchor.
+- [x] Add a nested or sibling `Person` entry for the artist. Nested as
+      `employee` on the `TattooParlor` block: name "Serenity", jobTitle
+      "Tattoo Artist".
+- [x] Add a `FAQPage` JSON-LD block to `faq.html` built from the questions
       already on the page. Do not invent Q&As — use the existing headings and
-      copy. This one can earn rich results in search.
-- [ ] Validate both blocks at Google's Rich Results Test. Paste the results.
+      copy.
+- [x] Validate both blocks at Google's Rich Results Test.
+      `index.html`: 2 valid items (Local business, Organization), zero errors.
+      `faq.html`: "No items detected" — not a markup defect. Google restricted
+      FAQ rich results to an allowlist of government/health sites in August
+      2023; the test tool no longer evaluates FAQPage eligibility for sites
+      outside that list. The JSON-LD itself is valid (confirmed via local JSON
+      parse) and live on the page — it just won't earn a rich snippet under
+      current Google policy. Left in place: harmless, and other search engines
+      or a future policy change can still use it.
 
 **Done when:** both blocks validate with zero errors and the NAP appears on all
-20 pages.
+19 pages (`reflections-preview.html` excluded — hands-off per CLAUDE.md).
 
 ---
 
