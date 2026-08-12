@@ -118,12 +118,16 @@ a text `h1`. Titles carry the keywords, headings carry nothing.
 logo still links home, and nothing looks different visually except the page
 title styling. Verified structurally (grep: every page has exactly 1 `h1`/`h2`
 balanced tag pair, no page still wraps the logo in `h1` except the hands-off
-`reflections.html`). **Not verified visually** — no browser/screenshot tooling
-available in this environment (no Node, no working Python, no headless
-Chromium). Two spots worth an eyeball in Live Server before calling this done:
-header spacing around the logo (it lost `h1`'s default block margin when
-unwrapped, so it may sit slightly closer to the nav than before), and the new
-`h1` page titles at their larger/gradient styling on each page.
+`reflections.html`). Also verified visually: no Live Server/VS Code available
+in this environment, so a throwaway PowerShell static file server (proxying
+`/.netlify/images` requests to the raw `Photos/` file, so real image
+dimensions render) plus headless Edge (`msedge --headless --screenshot`) stood
+in for it. Screenshotted about, index, links, faq, booking, and gallery —
+header spacing around the logo held up fine (no visible gap regression from
+losing `h1`'s default margin), the new `h1` titles render at the right size
+with the gold-to-coral gradient, the FAQ page's `&amp;` displays as `&`, and
+gallery's filter buttons/nav wrap are unaffected. Server torn down and scratch
+files removed after.
 
 ---
 
