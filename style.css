@@ -463,6 +463,33 @@ figure {
   cursor: default;
 }
 
+/* .lightbox-overlay is position:fixed and covers the viewport, so this
+   absolute position is relative to the whole screen, not the image -
+   the button stays pinned to the corner regardless of image size. 44px
+   square meets the general mobile tap-target minimum. */
+.lightbox-close {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  background-color: var(--color-bg);
+  color: var(--color-accent);
+  font-size: 1.75rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.lightbox-close:hover {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
 
 .lang-switch {
   display: inline-block;

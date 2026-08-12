@@ -212,16 +212,57 @@ correct order), gallery.html (caption placement/styling on the grid).
 **Scope:** the lightbox in `script.js` has no close button, no dialog
 semantics, no focus management. Keyboard users get stranded in it.
 
-- [ ] Add a visible close button.
-- [ ] Add `role="dialog"` and `aria-modal="true"` to the overlay.
-- [ ] Move focus to the close button on open; return it to the triggering
+- [x] Add a visible close button.
+- [x] Add `role="dialog"` and `aria-modal="true"` to the overlay.
+- [x] Move focus to the close button on open; return it to the triggering
       gallery button on close.
-- [ ] Trap Tab within the dialog while it is open.
-- [ ] Escape closes. The close button closes. Clicking the backdrop closes.
+- [x] Trap Tab within the dialog while it is open.
+- [x] Escape closes. The close button closes. Clicking the backdrop closes.
       Clicking the image itself does **not** close — that is the current bug.
 
 Reference the WAI-ARIA Authoring Practices modal dialog pattern. Explain how the
 focus trap works rather than just pasting an implementation.
+
+**What changed:** `.lightbox-overlay` in `index.html` and `gallery.html` now
+carries `role="dialog"`, `aria-modal="true"`, and a dynamic `aria-label` (set
+to the opened image's alt text each time). A visible `.lightbox-close` button
+(gold circle, 44px so it's a real tap target) sits inside it. All the new
+behavior lives in `script.js`, since that one file is shared by both pages.
+
+**How the focus trap works:** a dialog is only "modal" if keyboard focus
+can't leave it while open. The APG pattern for this is to intercept `Tab` at
+the document level for as long as the dialog is open, and when focus is on
+the *last* focusable element inside the dialog and the user presses `Tab`
+(not `Shift+Tab`), move focus back to the *first* one instead of letting it
+run off to whatever's next in the page — and the mirror case for `Shift+Tab`
+on the *first* element, wrapping back to the *last*. Everywhere else in the
+middle of that list, the browser's native tab order already stays inside the
+dialog on its own, so only those two boundary cases need handling.
+`focusableElements()` queries for the usual focusable selectors
+(`button`, `[href]`, form controls, `[tabindex]`) scoped to `.lightbox-overlay`
+rather than hard-coding "the close button", so it keeps working if the dialog
+ever gains more controls. The listener is added in `openLightbox()` and
+removed in `closeLightbox()` — it must not stay attached once the dialog is
+closed, or it would start eating `Tab` presses on the rest of the page.
+
+**The image-click bug:** `overlay.addEventListener('click', ...)` closes on
+*any* click inside `.lightbox-overlay`, including the image, because click
+events bubble up to whatever element the listener is attached to — a click
+on the image is, by the time it reaches the overlay's listener, indistin­
+guishable from a click on the empty backdrop unless something rules it out.
+The fix checks `e.target === overlay`: `e.target` is the innermost element
+actually clicked, so this is only true for a direct click on the backdrop
+itself, not one that bubbled up from the image or the close button.
+
+**Verified interactively** (not just visually): built a throwaway test page
+in the site root (loading the real `style.css`/`script.js`, deleted before
+committing — never part of the site) that scripts a click sequence and
+asserts on the result. All 11 checks passed: opens on trigger click, focus
+moves to the close button, `role`/`aria-modal` present, clicking the image
+keeps it open, Tab loops back to the close button, backdrop click closes it
+and returns focus to the trigger, Escape does the same, and the close button
+itself closes it. Screenshotted the open state too — close button visible
+top-right with a visible focus ring on it.
 
 ---
 

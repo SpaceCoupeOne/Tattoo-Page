@@ -2,25 +2,87 @@ document.addEventListener('DOMContentLoaded', function () {
   var overlay = document.querySelector('.lightbox-overlay');
   if (!overlay) return;
   var overlayImg = overlay.querySelector('img');
+  var closeBtn = overlay.querySelector('.lightbox-close');
+  if (!closeBtn) return;
   var lightboxTriggers = document.querySelectorAll('.gallery-item, .preview-grid img');
+
+  // The element that opened the dialog, so focus can return to it on
+  // close. Screen reader and keyboard users would otherwise land back at
+  // the top of the page and have to re-navigate to where they were.
+  var openerEl = null;
+
+  function focusableElements() {
+    // Only two possible focusable descendants today (the close button
+    // and the image, and the image isn't focusable without a tabindex),
+    // but this is written to keep working if the dialog ever gains more
+    // controls, rather than hard-coding "just the close button".
+    return Array.prototype.slice.call(
+      overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
+    );
+  }
+
+  // Keeps Tab/Shift+Tab cycling only through elements inside the dialog,
+  // so keyboard focus can't slip out to the page underneath while it's
+  // open. Only the two ends of the tab order need handling: everywhere
+  // else, the browser's normal Tab behavior already stays inside the
+  // dialog on its own.
+  function trapFocus(e) {
+    if (e.key === 'Escape') {
+      closeLightbox();
+      return;
+    }
+    if (e.key !== 'Tab') return;
+
+    var focusable = focusableElements();
+    if (focusable.length === 0) return;
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
+  }
+
+  function openLightbox(trigger) {
+    var img = trigger.tagName === 'IMG' ? trigger : trigger.querySelector('img');
+    overlayImg.src = img.dataset.full || img.src;
+    overlayImg.alt = img.alt;
+    overlay.setAttribute('aria-label', img.alt || 'Image preview');
+    openerEl = trigger;
+    overlay.classList.add('active');
+    closeBtn.focus();
+    document.addEventListener('keydown', trapFocus);
+  }
+
+  function closeLightbox() {
+    overlay.classList.remove('active');
+    document.removeEventListener('keydown', trapFocus);
+    if (openerEl) {
+      openerEl.focus();
+      openerEl = null;
+    }
+  }
 
   lightboxTriggers.forEach(function (trigger) {
     trigger.addEventListener('click', function () {
-      var img = trigger.tagName === 'IMG' ? trigger : trigger.querySelector('img');
-      overlayImg.src = img.dataset.full || img.src;
-      overlayImg.alt = img.alt;
-      overlay.classList.add('active');
+      openLightbox(trigger);
     });
   });
 
-  overlay.addEventListener('click', function () {
-    overlay.classList.remove('active');
-  });
+  closeBtn.addEventListener('click', closeLightbox);
 
-  document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape') {
-      overlay.classList.remove('active');
-    }
+  // Only close on a direct click on the backdrop itself. Without the
+  // target check, this fires on *any* click inside .lightbox-overlay,
+  // including the image and the close button, because click events
+  // bubble up to the element the listener is attached to - so a click
+  // on the image reads here as "clicked the overlay" unless it's ruled
+  // out explicitly.
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) closeLightbox();
   });
 
   var filterButtons = document.querySelectorAll('.filter-btn');
