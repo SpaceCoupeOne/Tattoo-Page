@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
   var overlay = document.querySelector('.lightbox-overlay');
+  if (!overlay) return;
   var overlayImg = overlay.querySelector('img');
   var lightboxTriggers = document.querySelectorAll('.gallery-item, .preview-grid img');
 
