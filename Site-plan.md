@@ -268,7 +268,27 @@ top-right with a visible focus ring on it.
 
 ## Later, low priority
 
-- [ ] Convert `Serenity-Header.jpg` (122 KB for a wordmark) to SVG
-- [ ] Surface the Spanish aftercare page from the main nav, not just from the
-      English aftercare page
-- [ ] Add `<lastmod>` to `sitemap.xml`, and add `/reflections` once it ships
+- [ ] ~~Convert `Serenity-Header.jpg` (122 KB for a wordmark) to SVG~~ Skipped,
+      owner's call. It's not a flat logo mark — it's a painted illustration
+      (gradient shading, hair texture, jewelry detail), which isn't something
+      an automated raster trace can convert well, and no real vector-tracing
+      tool (Illustrator/Inkscape/potrace) was available in this environment
+      to do it properly by hand either. Every usage already goes through the
+      Netlify image CDN (`?w=1100&fm=webp`), which serves a resized WebP
+      rather than the raw 122 KB file, so most of the real-world byte savings
+      this item was chasing are already happening. Revisit if the artist ever
+      has a layered/vector source file to export from directly.
+- [x] Surface the Spanish aftercare page from the main nav, not just from the
+      English aftercare page. Added `<a href="aftercare-es.html">Español</a>`
+      to the shared nav on all 17 other pages carrying it (including
+      `reflections.html` — nav is shared site chrome per Session 1's
+      precedent, not page content covered by its hands-off status). On
+      `aftercare-es.html` itself that nav slot reads `<a href="aftercare.html">
+      English</a>` instead of linking to itself, mirroring the existing
+      in-page `.lang-switch` link.
+- [x] Add `<lastmod>` to `sitemap.xml`. Used each page's real last-commit date
+      from git history rather than stamping today's date uniformly — they
+      happened to all genuinely be `2026-08-12` today, since every page's nav
+      was just touched. Did not add `/reflections` — it's still noindex and
+      hands-off per CLAUDE.md, so it hasn't "shipped" yet per this item's own
+      condition.
