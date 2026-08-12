@@ -14,8 +14,14 @@ session bleed into the next one's scope.
 
 - [ ] Add `<meta name="robots" content="noindex">` to `reflections.html`,
       `thank-you.html`, and `404.html`. Nothing else in `reflections.html`.
-- [ ] Fix `og:url` in `gallery.html` (currently `/gallery.html`, should be
-      `/gallery`) and `faq.html` (currently `/faq.html`, should be `/faq`).
+- [ ] Fix `og:url` on the 7 pages carrying a `.html` suffix — `about`,
+      `aftercare`, `booking`, `faq`, `gallery`, `games`, `reflections` — to the
+      extensionless form matching each page's canonical. Do not add `og:url` to
+      pages that lack it; that's out of scope.
+- [ ] Add a canonical tag to `links.html`
+      (`https://serenitybliss.tattoo/links`) — it's the only page with an
+      `og:url` and no canonical.
+- [ ] Add `/links` to `sitemap.xml`.
 - [ ] Add `loading="lazy"` to the 2nd and 3rd `<img>` in the `.preview-grid` on
       `index.html`. Leave the 1st alone — it has `fetchpriority="high"` and is
       above the fold.
