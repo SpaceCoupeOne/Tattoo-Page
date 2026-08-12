@@ -150,22 +150,60 @@ schema `email` field.
 
 ## Session 5 — Form and gallery polish
 
-- [ ] Booking form: the medical conditions field is a required `<textarea>` with
+- [x] Booking form: the medical conditions field is a required `<textarea>` with
       no "none" option, so most people will type "n/a". Convert it to a Yes/No
       radio pair plus a conditional textarea. Copy the existing allergies
       pattern exactly — `allergies-yes` / `allergies-no` /
       `allergies-followup` and its toggle function are the template.
-- [ ] Make the phone field optional. Email is already required and is the
-      stated contact channel.
-- [ ] Add a books-open/closed status line at the top of `booking.html`, in a
+      Done — `medical-yes` / `medical-no` / `medical-followup`, same toggle
+      function shape as `toggleAllergiesFollowup`, textarea `required` only
+      when "Yes" is selected.
+- [x] Make the phone field optional. Email is already required and is the
+      stated contact channel. Removed `required` and the `*` from the label.
+- [x] Add a books-open/closed status line at the top of `booking.html`, in a
       clearly marked block the owner can hand-edit. Currently the FAQ sends
       people to Instagram for booking status, which loses them at peak intent.
-- [ ] Gallery captions: add a short line under each image with placement, style,
+      Added a `.books-status` block right under the `h1`, with an HTML comment
+      telling the owner exactly what to change (the div's class between
+      `books-status-open`/`books-status-closed`, plus the sentence in
+      `<strong>`). Styled like the existing `.callout` card — solid surface
+      background, not a color tint, since a translucent gold/coral tint read
+      muddy against the page's own background gradient this high up the page.
+- [x] Gallery captions: add a short line under each image with placement, style,
       and session count. Content comes from the owner; build the markup and CSS
       with placeholders if the copy is not ready.
-- [ ] The FAQ page runs ~2,000 words in one column. Either add an anchor-link
+      Added `<p class="gallery-caption">Placement · Style · Sessions</p>`
+      inside all 34 `.gallery-item` buttons (identical placeholder text,
+      not per-photo guesses from the alt text — guessing at real session
+      counts would present fabricated specifics as real data). Sits inside
+      the button so clicking the caption still opens the lightbox; no JS
+      change needed since the click handler already does
+      `trigger.querySelector('img')`.
+- [x] The FAQ page runs ~2,000 words in one column. Either add an anchor-link
       table of contents at the top or convert the sections to `<details>`
       accordions. Pick one and say why.
+      Chose `<details>`/`<summary>` accordions, closed by default. Reasons:
+      zero JS (native disclosure widget, matches the site's no-dependency
+      approach), built-in keyboard support, and it directly shortens the
+      page instead of just adding navigation on top of an still-long page —
+      the FAQ audience is mostly mobile (per the booking form and the
+      Instagram-driven `links.html`), where a jump-to-section TOC is a worse
+      fit than a list that's short until you tap into it. Modern Chrome and
+      Firefox auto-expand a closed `<details>` and scroll to it when the
+      target is reached via a fragment link, so `links.html`'s existing
+      `faq.html#what-to-expect` link still works — moved that `id` onto the
+      `<summary>` (not the `<details>` itself) so the auto-expand triggers.
+      The 10 accordion questions match the 10 `Question` entries already in
+      the page's `FAQPage` JSON-LD (Session 2) one-to-one; content inside a
+      closed `<details>` is still crawled and indexed by Google, so this
+      doesn't regress that schema's accuracy.
+
+**Not verified:** the booking form's file-size-limit JS and multi-step submit
+flow weren't exercised end-to-end (no live Netlify Forms endpoint in this
+environment) — only that the new medical-conditions toggle mirrors the
+allergies one structurally. Screenshotted and confirmed visually: booking.html
+top (status block + phone field), faq.html (all 10 accordion rows collapsed,
+correct order), gallery.html (caption placement/styling on the grid).
 
 ---
 

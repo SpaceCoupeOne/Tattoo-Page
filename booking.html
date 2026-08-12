@@ -40,6 +40,19 @@
   </header>
 
   <h1>Book a Tattoo Appointment</h1>
+
+  <!--
+    BOOKS STATUS — hand-edit this block only, nothing else.
+    To switch between open and closed:
+      1. Change the class on the div below from "books-status-open" to
+         "books-status-closed" (or back).
+      2. Change the sentence inside the <strong> tag to match.
+    That's it — the border color and background follow the class.
+  -->
+  <div class="books-status books-status-open">
+    <p><strong>Books are currently OPEN.</strong> I'm accepting new appointment requests below.</p>
+  </div>
+
   <p>Thank you for considering me as your tattoo artist! Before you apply, read through the <a href="faq.html">FAQ</a> for pricing, prep, and studio policies.</p>
   <div class="callout">
     <p><strong>An appointment cannot be made until a deposit has been paid.</strong></p>
@@ -70,8 +83,8 @@
       </div>
 
       <div class="form-field">
-        <label for="field-phone">Phone number <span class="required">*</span></label>
-        <input type="tel" id="field-phone" name="phone" required>
+        <label for="field-phone">Phone number</label>
+        <input type="tel" id="field-phone" name="phone">
       </div>
 
       <div class="form-field form-checkbox">
@@ -168,9 +181,15 @@
         <p>In this section, it is important that you disclose any medical conditions that may affect the application and/or healing of the tattoo. <strong>This information will not be disclosed to anyone other than myself.</strong></p>
       </div>
 
-      <div class="form-field">
-        <label for="field-medical">Do you have any medical conditions that may affect the application and/or healing of the tattoo? This includes, but is not limited to: psoriasis, eczema, anemia, keratosis pilaris, seizures, fainting, recent surgeries, etc. <span class="required">*</span></label>
-        <textarea id="field-medical" name="medical_conditions" rows="3" required></textarea>
+      <fieldset class="form-field">
+        <legend>Do you have any medical conditions that may affect the application and/or healing of the tattoo? This includes, but is not limited to: psoriasis, eczema, anemia, keratosis pilaris, seizures, fainting, recent surgeries, etc. <span class="required">*</span></legend>
+        <label class="form-radio"><input type="radio" name="has_medical_conditions" value="Yes" required id="medical-yes"> Yes</label>
+        <label class="form-radio"><input type="radio" name="has_medical_conditions" value="No" required id="medical-no"> No</label>
+      </fieldset>
+
+      <div class="form-field" id="medical-followup" hidden>
+        <label for="field-medical">Please specify.</label>
+        <textarea id="field-medical" name="medical_conditions" rows="3"></textarea>
         <p class="form-hint">This is used only to plan your session safely. It is not shared with anyone and is deleted once your appointment is complete.</p>
       </div>
 
@@ -284,6 +303,20 @@
 
       coverupYes.addEventListener('change', toggleCoverupFollowup);
       coverupNo.addEventListener('change', toggleCoverupFollowup);
+
+      var medicalYes = document.getElementById('medical-yes');
+      var medicalNo = document.getElementById('medical-no');
+      var medicalFollowup = document.getElementById('medical-followup');
+      var medicalField = document.getElementById('field-medical');
+
+      function toggleMedicalFollowup() {
+        var show = medicalYes.checked;
+        medicalFollowup.hidden = !show;
+        medicalField.required = show;
+      }
+
+      medicalYes.addEventListener('change', toggleMedicalFollowup);
+      medicalNo.addEventListener('change', toggleMedicalFollowup);
 
       var allergiesYes = document.getElementById('allergies-yes');
       var allergiesNo = document.getElementById('allergies-no');

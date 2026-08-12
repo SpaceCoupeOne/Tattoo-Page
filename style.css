@@ -167,6 +167,51 @@ h1, h2, h3, p, ul {
   max-width: 700px;
 }
 
+/* faq.html: each question is a <details>, closed by default, so the page
+   reads as a scannable list instead of ~2,000 words in one column. No JS
+   - <details>/<summary> already have the expand/collapse and keyboard
+   behavior built in. .faq-accordion summary carries the h3 look above
+   (same font, color, spacing) since it's doing the same job a heading
+   did before. */
+.faq-accordion {
+  max-width: 700px;
+  margin-top: 1.5rem;
+  border-bottom: 1px solid rgba(223, 213, 229, 0.2);
+  padding-bottom: 1.5rem;
+}
+
+.faq-accordion summary {
+  font-family: 'Fraunces', serif;
+  font-weight: 550;
+  font-variation-settings: 'SOFT' 40, 'WONK' 1;
+  font-size: 1.17em;
+  color: var(--color-accent);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.faq-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-accordion summary::after {
+  content: '▾';
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.faq-accordion[open] summary::after {
+  transform: rotate(180deg);
+}
+
+.faq-accordion summary + * {
+  margin-top: 1rem;
+}
+
 h3 {
   margin-top: 2.5rem;
 }
@@ -381,6 +426,16 @@ figure {
   cursor: zoom-in;
 }
 
+/* Placeholder copy until the owner supplies real placement/style/session
+   text per photo - see gallery.html. Sits inside the .gallery-item
+   button, so a click anywhere on the caption still opens the lightbox. */
+.gallery-caption {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: var(--color-muted);
+  text-align: center;
+}
+
 .lightbox-overlay {
   display: none;
   position: fixed;
@@ -451,6 +506,41 @@ figure {
 .callout a {
   color: var(--color-accent);
   text-decoration: underline;
+}
+
+/* Books-open/closed status on booking.html. Same card as .callout (solid
+   surface, not a color tint - the page's own background gradient shifts
+   from teal to gold further down, so a translucent tint read muddy up
+   here). The two modifier classes swap which brand color marks the
+   border and the "OPEN"/"CLOSED" text: gold for open, coral for closed. */
+.books-status {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border-left: 4px solid;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  max-width: 700px;
+}
+
+.books-status p {
+  margin: 0;
+}
+
+.books-status-open {
+  border-color: var(--color-accent);
+}
+
+.books-status-open strong {
+  color: var(--color-accent);
+}
+
+.books-status-closed {
+  border-color: var(--color-accent-2);
+}
+
+.books-status-closed strong {
+  color: var(--color-accent-2);
 }
 
 
