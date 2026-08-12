@@ -1,0 +1,45 @@
+name: Sync availability
+
+on:
+  schedule:
+    # Every day at 07:00 and 19:00 UTC (2am / 2pm Central).
+    # Cron here is always UTC — GitHub ignores the TZ set below for scheduling.
+    - cron: '0 7,19 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      # Runners are UTC. Without this, a 6pm Texas appointment reads as
+      # midnight the next day and marks the wrong square.
+      TZ: America/Chicago
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm install node-ical --no-save
+
+      - name: Rebuild availability.json
+        env:
+          CALENDAR_ICS_URL: ${{ secrets.CALENDAR_ICS_URL }}
+        run: node scripts/sync-availability.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name  "availability-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if git diff --quiet availability.json; then
+            echo "No change."
+          else
+            git add availability.json
+            git commit -m "Update availability"
+            git push
+          fi
