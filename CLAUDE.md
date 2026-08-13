@@ -49,6 +49,20 @@ source files in `Photos/` untouched.
 and the sitemap use the extensionless form. Internal `href`s use `.html` and
 Netlify resolves them.
 
+**CSS/JS caching.** `_headers` sets `/*.css` and `/*.js` to
+`Cache-Control: public, max-age=0, must-revalidate` — not a long max-age.
+There's no filename fingerprinting (no hashed filenames, no build step to
+generate them), so a long cache on `style.css`/`script.js`/`calendar.js`
+means returning visitors can be stuck on stale CSS/JS for days with no way
+to bust it. `max-age=0, must-revalidate` makes the browser check with
+Netlify on every load (a cheap 304 if unchanged) instead of trusting a
+local copy. Since existing visitors' browsers may already be holding the
+old week-long cache from before this changed, every reference to these
+three files across the HTML pages carries a `?v=2` query string to force a
+fresh fetch past that old cache. Bump that number (`?v=3`, etc.) on
+whichever file actually changed next time — everywhere that file is
+referenced, not the other two — to force another one-time refetch.
+
 ## Colors
 
 Defined as CSS custom properties in `:root` at the top of `style.css`. Use the
