@@ -4,17 +4,20 @@
    skips straight over it into the form below.
 
    The whole visual scheme is one signal: open days are the only
-   high-contrast thing in the grid. Booked and past days both recede
-   identically - a client scanning for a gap shouldn't be able to tell
-   "someone else has this day" from "this day already happened," they
-   both just read as "not this one." Don't add a marker to either, or a
-   busy month starts reading as a wall instead of a scannable gap.
+   high-contrast thing in the grid. Booked, past, and closed (Sunday/
+   Monday - not a working day) all recede identically - a client
+   scanning for a gap shouldn't be able to tell "someone else has this
+   day" from "this day already happened" from "we're not open then,"
+   they all just read as "not this one." Don't add a marker to any of
+   them, or a busy month starts reading as a wall instead of a
+   scannable gap.
 
    That contrast is invisible to a screen reader, though, so every
-   booked cell (and only booked cells - open/past days rely on their
-   plain visible number as the accessible name) carries an aria-label
-   spelling out that the day is taken. That label is the only thing
-   telling a non-visual user a day is booked - don't remove it. */
+   booked or closed cell (and only those - open/past days rely on
+   their plain visible number as the accessible name) carries an
+   aria-label spelling out why. Those labels are the only thing
+   telling a non-visual user a day isn't available - don't remove
+   them. */
 
 document.addEventListener('DOMContentLoaded', function () {
   var container = document.getElementById('availability-calendar');
@@ -75,8 +78,17 @@ document.addEventListener('DOMContentLoaded', function () {
       var cell = document.createElement('span');
       cell.textContent = String(d);
 
+      // getDay(): 0 = Sunday, 1 = Monday. Studio doesn't work either,
+      // so these are closed regardless of what the calendar feed says -
+      // checked ahead of `booked` so a stray Sun/Mon calendar event
+      // (there shouldn't be one) can't override it.
+      var dow = new Date(year, month, d).getDay();
+
       if (key < todayKey) {
         cell.className = 'day-past';
+      } else if (dow === 0 || dow === 1) {
+        cell.className = 'day-closed';
+        cell.setAttribute('aria-label', MONTH_NAMES[month] + ' ' + d + ', closed');
       } else if (booked.has(key)) {
         cell.className = 'day-booked';
         cell.setAttribute('aria-label', MONTH_NAMES[month] + ' ' + d + ', booked');

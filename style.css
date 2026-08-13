@@ -1258,11 +1258,12 @@ figure {
   font-weight: 600;
 }
 
-/* Booked and past both recede the same way, deliberately
-   indistinguishable from each other - a client scanning for a gap
-   only needs "not this one," not "why not." */
+/* Booked, past, and closed (Sunday/Monday) all recede the same way,
+   deliberately indistinguishable from each other - a client scanning
+   for a gap only needs "not this one," not "why not." */
 .day-booked,
-.day-past {
+.day-past,
+.day-closed {
   color: var(--color-muted);
   opacity: 0.5;
 }
