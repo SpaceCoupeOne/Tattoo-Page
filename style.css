@@ -361,13 +361,23 @@ footer p {
 .footer-links {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
-  gap: 0.5rem 1.25rem;
+  /* Tighter than before (was 1.25rem): the middot below now carries
+     the visual gap between links, so the flex gap on top of it only
+     needs to be enough to keep the dot from crowding either link. */
+  gap: 0.5rem 0.6rem;
   margin-bottom: 1rem;
 }
 
 /* Underlines on four adjacent links is what made this noisy.
-   Colour carries "link" here; the underline comes back on hover. */
+   Colour carries "link" here; the underline comes back on hover. Four
+   gold links with only whitespace between them still read as one
+   run-on phrase though - especially "Red Dagger Tattoo", which is
+   itself two words - so .footer-sep (a plain, non-link middot, same
+   character already used for the gallery captions) marks the actual
+   boundaries. aria-hidden since the <nav> already gives non-visual
+   users link-by-link navigation without it. */
 .footer-links a,
 .footer-nap a {
   color: var(--color-accent);
@@ -378,6 +388,10 @@ footer p {
 .footer-links a:hover,
 .footer-nap a:hover {
   text-decoration: underline;
+}
+
+.footer-sep {
+  color: var(--color-muted);
 }
 
 .hero {
