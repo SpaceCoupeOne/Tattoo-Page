@@ -289,7 +289,11 @@ nav {
   width: 100%;
 }
 
-nav a {
+/* Scoped to the header's nav specifically - written back when it was
+   the only <nav> on the page. links.html's .link-list and the footer's
+   .footer-links are both <nav> too now, and neither wants the pill-
+   button treatment (each has its own, more specific link styling). */
+header nav a {
   display: inline-block;
   font-size: 1.5rem;
   font-weight: 500;
@@ -298,7 +302,7 @@ nav a {
   padding: 0.4rem 1.35rem;
 }
 
-nav a:hover {
+header nav a:hover {
   background-color: var(--color-accent);
   color: var(--color-bg);
   text-decoration: none;
@@ -320,13 +324,60 @@ footer {
   font-size: 1rem;
   font-weight: 600;
   display: flex;
+  /* Was row+wrap for the old footer, a flat list of <p> tags meant to
+     flow and wrap together. The new footer is four stacked blocks
+     (name, address, link row, copyright), so it needs a column instead
+     - row+wrap would lay those four blocks out side by side. Spacing
+     between the blocks now comes from each one's own margin-bottom
+     below, not a gap here - flex gap stacks on top of a child's own
+     margin rather than collapsing with it, so keeping both would
+     double up. */
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 2rem;
-  flex-wrap: wrap;
 }
 
+footer address,
 footer p {
   margin: 0;
+}
+
+.footer-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--color-text);
+  margin-bottom: 0.35rem;
+}
+
+/* <address> italicises by default in every browser. */
+.footer-nap {
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-muted);
+  margin-bottom: 1rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.25rem;
+  margin-bottom: 1rem;
+}
+
+/* Underlines on four adjacent links is what made this noisy.
+   Colour carries "link" here; the underline comes back on hover. */
+.footer-links a,
+.footer-nap a {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.footer-links a:hover,
+.footer-nap a:hover {
+  text-decoration: underline;
 }
 
 .hero {
@@ -1288,12 +1339,12 @@ figure {
     height: auto;
   }
 
-  nav {
+  header nav {
     gap: 0.6rem;
     width: 100%;
   }
 
-  nav a {
+  header nav a {
     font-size: 1.1rem;
     padding: 0.7rem 0.75rem;
   }
