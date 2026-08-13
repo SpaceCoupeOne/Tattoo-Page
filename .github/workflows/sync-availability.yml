@@ -36,10 +36,19 @@ jobs:
         run: |
           git config user.name  "availability-bot"
           git config user.email "actions@users.noreply.github.com"
-          if git diff --quiet availability.json; then
+          # `git diff --quiet` only looks at already-tracked files, so on
+          # the very first run - before availability.json is ever
+          # committed - it's untracked and invisible to that command,
+          # which then reports "no difference" and exits 0. That skipped
+          # the add/commit/push below every single run, so the file was
+          # rebuilt on disk each time but never actually landed in the
+          # repo. Stage first, then check the *staged* diff instead -
+          # `git diff --cached --quiet` correctly sees a brand new file
+          # as a change, not just edits to one that already exists.
+          git add availability.json
+          if git diff --cached --quiet; then
             echo "No change."
           else
-            git add availability.json
             git commit -m "Update availability"
             git push
           fi
