@@ -1204,6 +1204,73 @@ figure {
   backdrop-filter: blur(4px);
 }
 
+/* Session 7: two-month availability calendar on booking.html. Purely
+   informational - no cell is interactive or focusable, so Tab skips
+   straight over it into the form. The whole scheme is one signal: open
+   days are the only high-contrast thing in the grid. Booked and past
+   days both recede identically - do not give booked days their own
+   marker, and do not add a legend. Contrast alone is the signal on
+   purpose; a legend would say the same thing twice. */
+#availability-calendar {
+  margin: 1.5rem 0 2rem;
+}
+
+.calendar-months {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.calendar-month-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
+  text-align: center;
+}
+
+.calendar-weekdays,
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.35rem;
+}
+
+.calendar-weekdays {
+  margin-bottom: 0.35rem;
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.calendar-days > * {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.9rem;
+}
+
+/* Open: the one high-contrast cell in the grid - this is the entire
+   signal, on purpose. */
+.day-open {
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+/* Booked and past both recede the same way, deliberately
+   indistinguishable from each other - a client scanning for a gap
+   only needs "not this one," not "why not." */
+.day-booked,
+.day-past {
+  color: var(--color-muted);
+  opacity: 0.5;
+}
+
+.day-empty {
+  visibility: hidden;
+}
+
 /* All @media blocks must remain at the end of this file. New base rules
    go above them, never below. */
 
@@ -1270,6 +1337,12 @@ figure {
 
   .quick-version ul {
     padding-left: 1.1rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .calendar-months {
+    grid-template-columns: 1fr;
   }
 }
 
