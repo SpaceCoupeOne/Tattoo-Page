@@ -356,6 +356,14 @@ footer p {
   line-height: 1.6;
   color: var(--color-muted);
   margin-bottom: 1rem;
+  /* footer's align-items: center only centers this block as a whole
+     (by shrinking it to its widest line); text-align isn't a flex
+     property so it's never set for this block to inherit. That's
+     invisible for the address line (it's the widest line, so
+     left-align and center look the same) but the shorter phone
+     number on the line below was left-aligned within the block,
+     pulling it left of center. */
+  text-align: center;
 }
 
 .footer-links {
