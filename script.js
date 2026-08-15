@@ -67,7 +67,34 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // Clicking a thumbnail only starts fetching the full 1600px image at
+  // that instant, so there's a visible pause before it appears. Warming
+  // the browser's cache earlier - on hover (mouse), focus (keyboard), or
+  // touchstart (touchscreens, which fires slightly before the tap
+  // completes) - means the fetch is often already done by the time the
+  // click lands, so the swap feels instant instead of laggy. Harmless to
+  // call more than once per image: the Set skips repeats, and a request
+  // for a URL already in the browser's cache is served from there
+  // instead of hitting the network again.
+  var preloadedFulls = new Set();
+  function preloadFull(trigger) {
+    var img = trigger.tagName === 'IMG' ? trigger : trigger.querySelector('img');
+    var full = img && img.dataset.full;
+    if (!full || preloadedFulls.has(full)) return;
+    preloadedFulls.add(full);
+    new Image().src = full;
+  }
+
   lightboxTriggers.forEach(function (trigger) {
+    trigger.addEventListener('mouseenter', function () {
+      preloadFull(trigger);
+    });
+    trigger.addEventListener('focus', function () {
+      preloadFull(trigger);
+    });
+    trigger.addEventListener('touchstart', function () {
+      preloadFull(trigger);
+    }, { passive: true });
     trigger.addEventListener('click', function () {
       openLightbox(trigger);
     });
