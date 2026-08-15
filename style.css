@@ -499,16 +499,6 @@ figure {
   cursor: zoom-in;
 }
 
-/* Placeholder copy until the owner supplies real placement/style/session
-   text per photo - see gallery.html. Sits inside the .gallery-item
-   button, so a click anywhere on the caption still opens the lightbox. */
-.gallery-caption {
-  margin: 0.5rem 0 0;
-  font-size: 0.9rem;
-  color: var(--color-muted);
-  text-align: center;
-}
-
 .lightbox-overlay {
   display: none;
   position: fixed;
