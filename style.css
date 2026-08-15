@@ -553,6 +553,49 @@ figure {
   color: var(--color-bg);
 }
 
+/* Same fixed-to-viewport reasoning as .lightbox-close above, just pinned
+   to the left/right edge instead of a corner, vertically centered on the
+   image. Hidden entirely (not just via the [hidden] attribute's default
+   UA style, which the display:flex below would otherwise beat) when
+   there's only one image to browse - see script.js. */
+.lightbox-prev,
+.lightbox-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  background-color: var(--color-bg);
+  color: var(--color-accent);
+  font-size: 1.5rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.lightbox-prev[hidden],
+.lightbox-next[hidden] {
+  display: none;
+}
+
+.lightbox-prev:hover,
+.lightbox-next:hover {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.lightbox-prev {
+  left: 1.25rem;
+}
+
+.lightbox-next {
+  right: 1.25rem;
+}
+
 
 .lang-switch {
   display: inline-block;

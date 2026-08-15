@@ -3,22 +3,37 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!overlay) return;
   var overlayImg = overlay.querySelector('img');
   var closeBtn = overlay.querySelector('.lightbox-close');
+  var prevBtn = overlay.querySelector('.lightbox-prev');
+  var nextBtn = overlay.querySelector('.lightbox-next');
   if (!closeBtn) return;
   var lightboxTriggers = document.querySelectorAll('.gallery-item, .preview-grid img');
 
   // The element that opened the dialog, so focus can return to it on
   // close. Screen reader and keyboard users would otherwise land back at
   // the top of the page and have to re-navigate to where they were.
+  // Updated on every Prev/Next too, so closing after navigating returns
+  // focus to the thumbnail actually on screen, not wherever the dialog
+  // was first opened from.
   var openerEl = null;
 
+  // The set of images Prev/Next cycles through: whichever triggers are
+  // currently visible (gallery.html's filter buttons hide the rest via
+  // the .hidden class - see below). Recomputed each time the lightbox
+  // opens, so switching filters between visits is picked up.
+  var currentTriggers = [];
+  var currentIndex = -1;
+
   function focusableElements() {
-    // Only two possible focusable descendants today (the close button
-    // and the image, and the image isn't focusable without a tabindex),
-    // but this is written to keep working if the dialog ever gains more
-    // controls, rather than hard-coding "just the close button".
+    // Prev/Next are excluded when there's only one image to browse (see
+    // updateNavButtons) via the [hidden] attribute, which also drops an
+    // element from offsetParent - that's what the filter below checks,
+    // so a hidden nav button can't become the Tab-trap's "first"/"last"
+    // stop and swallow focus into an invisible control.
     return Array.prototype.slice.call(
       overlay.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')
-    );
+    ).filter(function (el) {
+      return el.offsetParent !== null;
+    });
   }
 
   // Keeps Tab/Shift+Tab cycling only through elements inside the dialog,
@@ -29,6 +44,14 @@ document.addEventListener('DOMContentLoaded', function () {
   function trapFocus(e) {
     if (e.key === 'Escape') {
       closeLightbox();
+      return;
+    }
+    if (e.key === 'ArrowRight') {
+      showNext();
+      return;
+    }
+    if (e.key === 'ArrowLeft') {
+      showPrev();
       return;
     }
     if (e.key !== 'Tab') return;
@@ -47,12 +70,50 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  function openLightbox(trigger) {
+  // Prev/Next only make sense - and only appear - when there's more than
+  // one image to move between.
+  function updateNavButtons() {
+    var show = currentTriggers.length > 1;
+    prevBtn.hidden = !show;
+    nextBtn.hidden = !show;
+  }
+
+  function showImageAtIndex(index) {
+    currentIndex = index;
+    var trigger = currentTriggers[currentIndex];
     var img = trigger.tagName === 'IMG' ? trigger : trigger.querySelector('img');
     overlayImg.src = img.dataset.full || img.src;
     overlayImg.alt = img.alt;
     overlay.setAttribute('aria-label', img.alt || 'Image preview');
     openerEl = trigger;
+    if (currentTriggers.length > 1) {
+      // Same hover-preload trick as the thumbnails, applied to whichever
+      // images Prev/Next would show next, so those feel instant too.
+      preloadFull(currentTriggers[(currentIndex + 1) % currentTriggers.length]);
+      preloadFull(currentTriggers[(currentIndex - 1 + currentTriggers.length) % currentTriggers.length]);
+    }
+  }
+
+  function showNext() {
+    if (currentTriggers.length < 2) return;
+    showImageAtIndex((currentIndex + 1) % currentTriggers.length);
+  }
+
+  function showPrev() {
+    if (currentTriggers.length < 2) return;
+    showImageAtIndex((currentIndex - 1 + currentTriggers.length) % currentTriggers.length);
+  }
+
+  function openLightbox(trigger) {
+    // .hidden is how gallery.html's filter buttons hide non-matching
+    // items (see the filter click handler below) - Prev/Next should
+    // only ever browse to images actually visible on the page.
+    currentTriggers = Array.prototype.filter.call(lightboxTriggers, function (t) {
+      return !t.classList.contains('hidden');
+    });
+    var startIndex = currentTriggers.indexOf(trigger);
+    showImageAtIndex(startIndex === -1 ? 0 : startIndex);
+    updateNavButtons();
     overlay.classList.add('active');
     closeBtn.focus();
     document.addEventListener('keydown', trapFocus);
@@ -101,6 +162,8 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   closeBtn.addEventListener('click', closeLightbox);
+  prevBtn.addEventListener('click', showPrev);
+  nextBtn.addEventListener('click', showNext);
 
   // Only close on a direct click on the backdrop itself. Without the
   // target check, this fires on *any* click inside .lightbox-overlay,
