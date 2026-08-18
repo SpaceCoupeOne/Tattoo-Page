@@ -12,18 +12,27 @@
    them, or a busy month starts reading as a wall instead of a
    scannable gap.
 
-   That contrast is invisible to a screen reader, though, so every
-   booked or closed cell (and only those - open/past days rely on
-   their plain visible number as the accessible name) carries an
-   aria-label spelling out why. Those labels are the only thing
-   telling a non-visual user a day isn't available - don't remove
-   them. */
+   That contrast is invisible to a screen reader, though, so every day
+   cell carries a hidden ".sr-only" span (see style.css) spelling out
+   its weekday, date, and - for booked/closed days - why it's
+   unavailable. Do NOT use aria-label for this: a bare <span> computes
+   to ARIA role "generic", and the spec marks generic's accessible-name
+   computation "prohibited" - Chrome (and others) silently drop
+   aria-label/aria-labelledby on it, so the label is invisible to every
+   screen reader no matter how correct the string is. Nested real text
+   isn't a "name", so it isn't subject to that prohibition; it just
+   gets read as part of the cell's content. The visible digit is
+   aria-hidden so it isn't announced a second time next to the hidden
+   text that already repeats it. */
 
 document.addEventListener('DOMContentLoaded', function () {
   var container = document.getElementById('availability-calendar');
   if (!container) return;
 
   var WEEKDAYS = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+  var FULL_WEEKDAYS = [
+    'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
+  ];
   var MONTH_NAMES = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
@@ -46,9 +55,10 @@ document.addEventListener('DOMContentLoaded', function () {
     title.textContent = MONTH_NAMES[month] + ' ' + year;
     monthEl.appendChild(title);
 
-    // Decorative - the day cells below are the only thing a screen
-    // reader needs, so the weekday initials are hidden from it rather
-    // than read out as a meaningless "Su Mo Tu We..." list.
+    // Decorative - hidden from the accessibility tree rather than read
+    // out as a meaningless "Su Mo Tu We..." list disconnected from the
+    // dates below it. Each day cell carries its own weekday name (see
+    // the .sr-only span built below) instead, so the context isn't lost.
     var weekdaysEl = document.createElement('div');
     weekdaysEl.className = 'calendar-weekdays';
     weekdaysEl.setAttribute('aria-hidden', 'true');
@@ -75,8 +85,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     for (var d = 1; d <= daysInMonth; d++) {
       var key = dateKey(year, month, d);
-      var cell = document.createElement('span');
-      cell.textContent = String(d);
 
       // getDay(): 0 = Sunday, 1 = Monday. Studio doesn't work either,
       // so these are closed regardless of what the calendar feed says -
@@ -84,17 +92,34 @@ document.addEventListener('DOMContentLoaded', function () {
       // (there shouldn't be one) can't override it.
       var dow = new Date(year, month, d).getDay();
 
+      var cell = document.createElement('span');
+
+      // The visible digit - hidden from the accessibility tree so it
+      // isn't announced a second time next to the .sr-only text below,
+      // which already repeats the date.
+      var digit = document.createElement('span');
+      digit.setAttribute('aria-hidden', 'true');
+      digit.textContent = String(d);
+      cell.appendChild(digit);
+
+      var status = null; // only booked/closed get a reason suffix
       if (key < todayKey) {
         cell.className = 'day-past';
       } else if (dow === 0 || dow === 1) {
         cell.className = 'day-closed';
-        cell.setAttribute('aria-label', MONTH_NAMES[month] + ' ' + d + ', closed');
+        status = 'closed';
       } else if (booked.has(key)) {
         cell.className = 'day-booked';
-        cell.setAttribute('aria-label', MONTH_NAMES[month] + ' ' + d + ', booked');
+        status = 'booked';
       } else {
         cell.className = 'day-open';
       }
+
+      var srText = document.createElement('span');
+      srText.className = 'sr-only';
+      srText.textContent = FULL_WEEKDAYS[dow] + ', ' + MONTH_NAMES[month] + ' ' + d +
+        (status ? ', ' + status : '');
+      cell.appendChild(srText);
 
       daysEl.appendChild(cell);
     }
