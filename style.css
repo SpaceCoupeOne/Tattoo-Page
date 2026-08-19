@@ -1055,6 +1055,12 @@ figure {
   padding: 10px;
   box-sizing: border-box;
   touch-action: none;
+  /* The tile numbers are plain text, so without this a click starts a
+     text selection - the mouse turns into an I-beam and you get a
+     flashing caret instead of just playing the game. */
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: default;
 }
 
 .game2048-bg,
