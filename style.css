@@ -278,8 +278,11 @@ p, ul {
   flex-wrap: wrap;
   /* h1 used to be followed by an intro paragraph, whose own margin did
      this job. Now .hero-ctas sits directly under the h1, so it needs its
-     own top margin or the buttons crowd the heading. */
-  margin-top: 2rem;
+     own top margin or the buttons crowd the heading. Kept small (roughly
+     one line) so the headline and buttons read as one block - see the
+     .hero h1 rule below, which zeroes the h1's own UA margin so this
+     value is the whole gap, not just the larger half of a collapse. */
+  margin-top: 1rem;
 }
 
 header {
@@ -425,7 +428,16 @@ footer p {
 
 .hero {
   position: relative;
-  padding: 5rem 2rem 8rem;
+  padding: 3rem 2rem 5rem;
+}
+
+/* Zeroes the browser's default h1 margin so the gap above (nav to h1)
+   comes only from .hero's own padding-top, and the gap below (h1 to
+   the buttons) comes only from .hero-ctas's margin-top. Without this,
+   the UA margin quietly adds to both and the two spacing decisions
+   can't be tuned independently. */
+.hero h1 {
+  margin: 0;
 }
 
 figure {
