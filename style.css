@@ -276,6 +276,10 @@ p, ul {
   display: flex;
   gap: 0.75rem;
   flex-wrap: wrap;
+  /* h1 used to be followed by an intro paragraph, whose own margin did
+     this job. Now .hero-ctas sits directly under the h1, so it needs its
+     own top margin or the buttons crowd the heading. */
+  margin-top: 2rem;
 }
 
 header {
@@ -421,7 +425,7 @@ footer p {
 
 .hero {
   position: relative;
-  padding: 6rem 2rem 10rem;
+  padding: 5rem 2rem 8rem;
 }
 
 figure {
