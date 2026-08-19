@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2048 | Serenity Bliss Tattoos</title>
+  <meta name="description" content="Play a quick game of 2048 in the browser.">
+  <meta property="og:title" content="2048 | Serenity Bliss Tattoos">
+  <meta property="og:description" content="Play a quick game of 2048 in the browser.">
+  <link rel="icon" type="image/png" href="fish-favicon.png">
+  <link rel="canonical" href="https://serenitybliss.tattoo/2048">
+  <link rel="stylesheet" href="style.css?v=5">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,500,40,1&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <header>
+    <a href="index.html"><img src="/.netlify/images?url=/Serenity-Header.jpg&w=1100&fm=webp" alt="Serenity Bliss Tattoos" class="site-logo" width="1600" height="483"></a>
+    <nav>
+
+  <a href="gallery.html">Gallery</a>
+  <a href="about.html">About</a>
+  <a href="booking.html">Booking</a>
+  <a href="faq.html">FAQ</a>
+  <a href="aftercare.html">Aftercare</a>
+  <a href="games.html">Games</a>
+  <a href="aftercare-es.html">Español</a>
+  <a href="reflections.html" class="nav-hide">Reflections</a>
+
+    </nav>
+  </header>
+
+  <h1>2048</h1>
+  <p><a href="games.html">&larr; Back to Games</a></p>
+  <p>Use the arrow keys (or swipe on mobile) to slide every tile. When two tiles with the same number touch, they merge into one. Reach 2048 to win.</p>
+
+  <div class="game2048-wrap">
+    <div class="game2048-grid" id="game2048-grid"></div>
+    <div class="game2048-side">
+      <p id="game2048-score">Score: 0</p>
+      <p id="game2048-best">Best: 0</p>
+      <p id="game2048-status" aria-live="polite"></p>
+      <button id="game2048-new" class="btn">New Game</button>
+    </div>
+  </div>
+
+  <footer>
+    <p class="footer-name">Serenity Bliss Tattoos</p>
+    <address class="footer-nap">
+      6751 Fairmont Pkwy, Pasadena, TX 77505<br>
+      <a href="tel:+12814164874">(281) 416-4874</a>
+    </address>
+    <nav class="footer-links" aria-label="Footer">
+      <a href="https://www.google.com/maps/search/?api=1&query=Red+Dagger+Tattoo%2C+Pasadena%2C+TX" target="_blank" rel="noopener noreferrer">Red Dagger Tattoo</a>
+      <span class="footer-sep" aria-hidden="true">&middot;</span>
+      <a href="mailto:serenityblisstattoos@gmail.com">Email</a>
+      <span class="footer-sep" aria-hidden="true">&middot;</span>
+      <a href="https://www.instagram.com/serenityblisstattoos" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <span class="footer-sep" aria-hidden="true">&middot;</span>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+    <p class="made-by-humans">Made by Humans - 2026</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var SIZE = 4;
+      var BEST_KEY = 'serenity-2048-best';
+      var grid, score, best, gameOver, wonAlready;
+      var cellEls = [];
+      var gridEl = document.getElementById('game2048-grid');
+      var scoreEl = document.getElementById('game2048-score');
+      var bestEl = document.getElementById('game2048-best');
+      var statusEl = document.getElementById('game2048-status');
+      var newGameBtn = document.getElementById('game2048-new');
+
+      // Build the 16 cell elements once. Every move just rewrites their
+      // text and class - same "redraw the whole board" approach as
+      // Minesweeper, simpler than animating individual tiles.
+      for (var i = 0; i < SIZE * SIZE; i++) {
+        var cell = document.createElement('div');
+        cell.className = 'game2048-cell';
+        gridEl.appendChild(cell);
+        cellEls.push(cell);
+      }
+
+      function emptyGrid() {
+        var g = [];
+        for (var r = 0; r < SIZE; r++) {
+          g.push([0, 0, 0, 0]);
+        }
+        return g;
+      }
+
+      function emptyCells() {
+        var list = [];
+        for (var r = 0; r < SIZE; r++) {
+          for (var c = 0; c < SIZE; c++) {
+            if (grid[r][c] === 0) list.push([r, c]);
+          }
+        }
+        return list;
+      }
+
+      function addRandomTile() {
+        var options = emptyCells();
+        if (options.length === 0) return;
+        var pick = options[Math.floor(Math.random() * options.length)];
+        grid[pick[0]][pick[1]] = Math.random() < 0.9 ? 2 : 4;
+      }
+
+      function render() {
+        for (var r = 0; r < SIZE; r++) {
+          for (var c = 0; c < SIZE; c++) {
+            var value = grid[r][c];
+            var el = cellEls[r * SIZE + c];
+            el.className = 'game2048-cell';
+            el.textContent = value === 0 ? '' : value;
+            if (value > 0) {
+              el.classList.add('game2048-cell--' + (value <= 2048 ? value : 'super'));
+              if (String(value).length === 3) el.classList.add('game2048-cell--mid');
+              if (String(value).length >= 4) el.classList.add('game2048-cell--small');
+            }
+          }
+        }
+        scoreEl.textContent = 'Score: ' + score;
+        bestEl.textContent = 'Best: ' + best;
+      }
+
+      // Slides and merges one line (already ordered from the "leading"
+      // edge to the "trailing" edge) toward the front. Every direction
+      // reuses this by feeding it rows or columns in the right order.
+      function slideLine(line) {
+        var values = line.filter(function (v) { return v !== 0; });
+        var result = [];
+        var gained = 0;
+        for (var i = 0; i < values.length; i++) {
+          if (i < values.length - 1 && values[i] === values[i + 1]) {
+            var merged = values[i] * 2;
+            result.push(merged);
+            gained += merged;
+            i++;
+          } else {
+            result.push(values[i]);
+          }
+        }
+        while (result.length < SIZE) result.push(0);
+        return { line: result, gained: gained };
+      }
+
+      function getLine(direction, index) {
+        var line = [];
+        for (var i = 0; i < SIZE; i++) {
+          if (direction === 'left') line.push(grid[index][i]);
+          else if (direction === 'right') line.push(grid[index][SIZE - 1 - i]);
+          else if (direction === 'up') line.push(grid[i][index]);
+          else line.push(grid[SIZE - 1 - i][index]);
+        }
+        return line;
+      }
+
+      function setLine(direction, index, line) {
+        for (var i = 0; i < SIZE; i++) {
+          if (direction === 'left') grid[index][i] = line[i];
+          else if (direction === 'right') grid[index][SIZE - 1 - i] = line[i];
+          else if (direction === 'up') grid[i][index] = line[i];
+          else grid[SIZE - 1 - i][index] = line[i];
+        }
+      }
+
+      function move(direction) {
+        if (gameOver) return;
+        var moved = false;
+        for (var index = 0; index < SIZE; index++) {
+          var before = getLine(direction, index);
+          var result = slideLine(before);
+          if (result.line.join(',') !== before.join(',')) moved = true;
+          score += result.gained;
+          setLine(direction, index, result.line);
+        }
+
+        if (!moved) return;
+
+        addRandomTile();
+        if (score > best) {
+          best = score;
+          localStorage.setItem(BEST_KEY, String(best));
+        }
+        render();
+        checkEndState();
+      }
+
+      function canMove() {
+        if (emptyCells().length > 0) return true;
+        for (var r = 0; r < SIZE; r++) {
+          for (var c = 0; c < SIZE; c++) {
+            var value = grid[r][c];
+            if (c < SIZE - 1 && grid[r][c + 1] === value) return true;
+            if (r < SIZE - 1 && grid[r + 1][c] === value) return true;
+          }
+        }
+        return false;
+      }
+
+      function checkEndState() {
+        var reached2048 = false;
+        for (var r = 0; r < SIZE; r++) {
+          for (var c = 0; c < SIZE; c++) {
+            if (grid[r][c] >= 2048) reached2048 = true;
+          }
+        }
+        if (reached2048 && !wonAlready) {
+          wonAlready = true;
+          statusEl.textContent = 'You reached 2048! Keep sliding for a higher score, or start over.';
+          return;
+        }
+        if (!canMove()) {
+          gameOver = true;
+          statusEl.textContent = 'No moves left - game over.';
+        }
+      }
+
+      function newGame() {
+        grid = emptyGrid();
+        score = 0;
+        gameOver = false;
+        wonAlready = false;
+        statusEl.textContent = '';
+        addRandomTile();
+        addRandomTile();
+        render();
+      }
+
+      document.addEventListener('keydown', function (e) {
+        var directions = {
+          ArrowLeft: 'left',
+          ArrowRight: 'right',
+          ArrowUp: 'up',
+          ArrowDown: 'down'
+        };
+        var direction = directions[e.key];
+        if (!direction) return;
+        e.preventDefault();
+        move(direction);
+      });
+
+      // Swipe support for mobile: compare the start and end touch point
+      // and move in whichever axis had the bigger change.
+      var touchStartX = 0, touchStartY = 0;
+      gridEl.addEventListener('touchstart', function (e) {
+        touchStartX = e.changedTouches[0].clientX;
+        touchStartY = e.changedTouches[0].clientY;
+      });
+      gridEl.addEventListener('touchend', function (e) {
+        var dx = e.changedTouches[0].clientX - touchStartX;
+        var dy = e.changedTouches[0].clientY - touchStartY;
+        var THRESHOLD = 20;
+        if (Math.max(Math.abs(dx), Math.abs(dy)) < THRESHOLD) return;
+        if (Math.abs(dx) > Math.abs(dy)) {
+          move(dx > 0 ? 'right' : 'left');
+        } else {
+          move(dy > 0 ? 'down' : 'up');
+        }
+      });
+
+      newGameBtn.addEventListener('click', newGame);
+
+      best = Number(localStorage.getItem(BEST_KEY)) || 0;
+      newGame();
+    });
+  </script>
+
+</body>
+
+</html>
