@@ -10,7 +10,7 @@
   <meta property="og:description" content="Play a quick game of 2048 in the browser.">
   <link rel="icon" type="image/png" href="fish-favicon.png">
   <link rel="canonical" href="https://serenitybliss.tattoo/2048">
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=6">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,7 +41,10 @@
   <p>Use the arrow keys (or swipe on mobile) to slide every tile. When two tiles with the same number touch, they merge into one. Reach 2048 to win.</p>
 
   <div class="game2048-wrap">
-    <div class="game2048-grid" id="game2048-grid"></div>
+    <div class="game2048-board" id="game2048-board">
+      <div class="game2048-bg" id="game2048-bg"></div>
+      <div class="game2048-tiles" id="game2048-tiles"></div>
+    </div>
     <div class="game2048-side">
       <p id="game2048-score">Score: 0</p>
       <p id="game2048-best">Best: 0</p>
@@ -72,37 +75,77 @@
     document.addEventListener('DOMContentLoaded', function () {
       var SIZE = 4;
       var BEST_KEY = 'serenity-2048-best';
-      var grid, score, best, gameOver, wonAlready;
-      var cellEls = [];
-      var gridEl = document.getElementById('game2048-grid');
+      // Keep this in sync with the "left"/"top" transition-duration in
+      // style.css's .game2048-tile rule - it's how long we wait before
+      // cleaning up a merged-away tile and dealing the next random one.
+      var SLIDE_MS = 120;
+
+      var tiles;          // [{id, value, row, col}, ...] - the live board
+      var nextId;
+      var tileEls = {};   // tile id -> its DOM element
+      var bgCellEls = [];
+      var score, best, gameOver, wonAlready;
+
+      var boardEl = document.getElementById('game2048-board');
+      var bgEl = document.getElementById('game2048-bg');
+      var tilesEl = document.getElementById('game2048-tiles');
       var scoreEl = document.getElementById('game2048-score');
       var bestEl = document.getElementById('game2048-best');
       var statusEl = document.getElementById('game2048-status');
       var newGameBtn = document.getElementById('game2048-new');
 
-      // Build the 16 cell elements once. Every move just rewrites their
-      // text and class - same "redraw the whole board" approach as
-      // Minesweeper, simpler than animating individual tiles.
+      // The 16 background slots are built once and never move - they're
+      // just the empty-cell look. Tiles are separate elements layered on
+      // top in #game2048-tiles, positioned in pixels to match a slot's
+      // real on-screen position. Moving a tile is then just changing its
+      // left/top, which style.css transitions - that's what makes it
+      // slide instead of jumping straight to the new number.
       for (var i = 0; i < SIZE * SIZE; i++) {
-        var cell = document.createElement('div');
-        cell.className = 'game2048-cell';
-        gridEl.appendChild(cell);
-        cellEls.push(cell);
+        var bgCell = document.createElement('div');
+        bgCell.className = 'game2048-bg-cell';
+        bgEl.appendChild(bgCell);
+        bgCellEls.push(bgCell);
       }
 
-      function emptyGrid() {
-        var g = [];
-        for (var r = 0; r < SIZE; r++) {
-          g.push([0, 0, 0, 0]);
-        }
-        return g;
+      function cellRect(row, col) {
+        var el = bgCellEls[row * SIZE + col];
+        return { left: el.offsetLeft, top: el.offsetTop, width: el.offsetWidth, height: el.offsetHeight };
+      }
+
+      function positionTileEl(el, row, col) {
+        var rect = cellRect(row, col);
+        el.style.left = rect.left + 'px';
+        el.style.top = rect.top + 'px';
+        el.style.width = rect.width + 'px';
+        el.style.height = rect.height + 'px';
+      }
+
+      function styleTileValue(el, value) {
+        el.className = 'game2048-tile game2048-tile--' + (value <= 2048 ? value : 'super');
+        if (String(value).length === 3) el.classList.add('game2048-tile--mid');
+        if (String(value).length >= 4) el.classList.add('game2048-tile--small');
+        el.textContent = value;
+      }
+
+      function createTileEl(tile) {
+        var el = document.createElement('div');
+        positionTileEl(el, tile.row, tile.col);
+        styleTileValue(el, tile.value);
+        el.classList.add('game2048-tile--spawn');
+        el.addEventListener('animationend', function () {
+          el.classList.remove('game2048-tile--spawn');
+        }, { once: true });
+        tilesEl.appendChild(el);
+        tileEls[tile.id] = el;
       }
 
       function emptyCells() {
+        var occupied = {};
+        tiles.forEach(function (t) { occupied[t.row + ',' + t.col] = true; });
         var list = [];
         for (var r = 0; r < SIZE; r++) {
           for (var c = 0; c < SIZE; c++) {
-            if (grid[r][c] === 0) list.push([r, c]);
+            if (!occupied[r + ',' + c]) list.push([r, c]);
           }
         }
         return list;
@@ -112,109 +155,128 @@
         var options = emptyCells();
         if (options.length === 0) return;
         var pick = options[Math.floor(Math.random() * options.length)];
-        grid[pick[0]][pick[1]] = Math.random() < 0.9 ? 2 : 4;
+        var tile = { id: nextId++, value: Math.random() < 0.9 ? 2 : 4, row: pick[0], col: pick[1] };
+        tiles.push(tile);
+        createTileEl(tile);
       }
 
-      function render() {
-        for (var r = 0; r < SIZE; r++) {
-          for (var c = 0; c < SIZE; c++) {
-            var value = grid[r][c];
-            var el = cellEls[r * SIZE + c];
-            el.className = 'game2048-cell';
-            el.textContent = value === 0 ? '' : value;
-            if (value > 0) {
-              el.classList.add('game2048-cell--' + (value <= 2048 ? value : 'super'));
-              if (String(value).length === 3) el.classList.add('game2048-cell--mid');
-              if (String(value).length >= 4) el.classList.add('game2048-cell--small');
-            }
-          }
-        }
-        scoreEl.textContent = 'Score: ' + score;
-        bestEl.textContent = 'Best: ' + best;
+      // Where position i (0 = leading edge) in the given row/column
+      // lands as a [row, col] pair, for each of the four directions.
+      function lineCoord(direction, index, i) {
+        if (direction === 'left') return [index, i];
+        if (direction === 'right') return [index, SIZE - 1 - i];
+        if (direction === 'up') return [i, index];
+        return [SIZE - 1 - i, index]; // down
       }
 
-      // Slides and merges one line (already ordered from the "leading"
-      // edge to the "trailing" edge) toward the front. Every direction
-      // reuses this by feeding it rows or columns in the right order.
-      function slideLine(line) {
-        var values = line.filter(function (v) { return v !== 0; });
-        var result = [];
-        var gained = 0;
-        for (var i = 0; i < values.length; i++) {
-          if (i < values.length - 1 && values[i] === values[i + 1]) {
-            var merged = values[i] * 2;
-            result.push(merged);
-            gained += merged;
-            i++;
-          } else {
-            result.push(values[i]);
-          }
-        }
-        while (result.length < SIZE) result.push(0);
-        return { line: result, gained: gained };
-      }
-
-      function getLine(direction, index) {
-        var line = [];
-        for (var i = 0; i < SIZE; i++) {
-          if (direction === 'left') line.push(grid[index][i]);
-          else if (direction === 'right') line.push(grid[index][SIZE - 1 - i]);
-          else if (direction === 'up') line.push(grid[i][index]);
-          else line.push(grid[SIZE - 1 - i][index]);
-        }
-        return line;
-      }
-
-      function setLine(direction, index, line) {
-        for (var i = 0; i < SIZE; i++) {
-          if (direction === 'left') grid[index][i] = line[i];
-          else if (direction === 'right') grid[index][SIZE - 1 - i] = line[i];
-          else if (direction === 'up') grid[i][index] = line[i];
-          else grid[SIZE - 1 - i][index] = line[i];
-        }
+      function buildGridIndex() {
+        var g = [];
+        for (var r = 0; r < SIZE; r++) g.push([null, null, null, null]);
+        tiles.forEach(function (t) { g[t.row][t.col] = t; });
+        return g;
       }
 
       function move(direction) {
         if (gameOver) return;
+
+        var gridIndex = buildGridIndex();
+        var survivors = [];
+        var removed = [];    // merged-away tiles, still animated to their target first
+        var mergedTiles = []; // survivors whose value just doubled
         var moved = false;
+        var gained = 0;
+
         for (var index = 0; index < SIZE; index++) {
-          var before = getLine(direction, index);
-          var result = slideLine(before);
-          if (result.line.join(',') !== before.join(',')) moved = true;
-          score += result.gained;
-          setLine(direction, index, result.line);
+          var lineTiles = [];
+          for (var i = 0; i < SIZE; i++) {
+            var lc = lineCoord(direction, index, i);
+            var t = gridIndex[lc[0]][lc[1]];
+            if (t) lineTiles.push(t);
+          }
+
+          // Same slide-and-merge rule as a plain number puzzle (no
+          // double-merging one tile twice in a single move), just
+          // carrying tile identity through so each one can animate.
+          var slot = 0;
+          for (var i = 0; i < lineTiles.length; i++) {
+            var tile = lineTiles[i];
+            var next = lineTiles[i + 1];
+            var origRow = tile.row, origCol = tile.col;
+            var dest = lineCoord(direction, index, slot);
+
+            if (next && next.value === tile.value) {
+              tile.row = dest[0];
+              tile.col = dest[1];
+              next.row = dest[0];
+              next.col = dest[1];
+              tile.value = tile.value * 2;
+              gained += tile.value;
+              survivors.push(tile);
+              removed.push(next);
+              mergedTiles.push(tile);
+              moved = true;
+              i++;
+            } else {
+              tile.row = dest[0];
+              tile.col = dest[1];
+              if (origRow !== dest[0] || origCol !== dest[1]) moved = true;
+              survivors.push(tile);
+            }
+            slot++;
+          }
         }
 
         if (!moved) return;
 
-        addRandomTile();
+        tiles = survivors;
+        score += gained;
         if (score > best) {
           best = score;
           localStorage.setItem(BEST_KEY, String(best));
         }
-        render();
-        checkEndState();
+        scoreEl.textContent = 'Score: ' + score;
+        bestEl.textContent = 'Best: ' + best;
+
+        // Slide everyone - including the tiles about to be merged away -
+        // to their destination. A merge pair ends up on top of each
+        // other, which is what reads as "two tiles becoming one".
+        survivors.forEach(function (t) { positionTileEl(tileEls[t.id], t.row, t.col); });
+        removed.forEach(function (t) { positionTileEl(tileEls[t.id], t.row, t.col); });
+
+        window.setTimeout(function () {
+          removed.forEach(function (t) {
+            var el = tileEls[t.id];
+            if (el) el.remove();
+            delete tileEls[t.id];
+          });
+          mergedTiles.forEach(function (t) {
+            var el = tileEls[t.id];
+            styleTileValue(el, t.value);
+            el.classList.add('game2048-tile--merged');
+            el.addEventListener('animationend', function () {
+              el.classList.remove('game2048-tile--merged');
+            }, { once: true });
+          });
+          addRandomTile();
+          checkEndState();
+        }, SLIDE_MS);
       }
 
       function canMove() {
         if (emptyCells().length > 0) return true;
+        var gridIndex = buildGridIndex();
         for (var r = 0; r < SIZE; r++) {
           for (var c = 0; c < SIZE; c++) {
-            var value = grid[r][c];
-            if (c < SIZE - 1 && grid[r][c + 1] === value) return true;
-            if (r < SIZE - 1 && grid[r + 1][c] === value) return true;
+            var value = gridIndex[r][c].value;
+            if (c < SIZE - 1 && gridIndex[r][c + 1].value === value) return true;
+            if (r < SIZE - 1 && gridIndex[r + 1][c].value === value) return true;
           }
         }
         return false;
       }
 
       function checkEndState() {
-        var reached2048 = false;
-        for (var r = 0; r < SIZE; r++) {
-          for (var c = 0; c < SIZE; c++) {
-            if (grid[r][c] >= 2048) reached2048 = true;
-          }
-        }
+        var reached2048 = tiles.some(function (t) { return t.value >= 2048; });
         if (reached2048 && !wonAlready) {
           wonAlready = true;
           statusEl.textContent = 'You reached 2048! Keep sliding for a higher score, or start over.';
@@ -227,14 +289,18 @@
       }
 
       function newGame() {
-        grid = emptyGrid();
+        tilesEl.innerHTML = '';
+        tileEls = {};
+        tiles = [];
+        nextId = 1;
         score = 0;
         gameOver = false;
         wonAlready = false;
         statusEl.textContent = '';
+        scoreEl.textContent = 'Score: 0';
+        bestEl.textContent = 'Best: ' + best;
         addRandomTile();
         addRandomTile();
-        render();
       }
 
       document.addEventListener('keydown', function (e) {
@@ -253,11 +319,11 @@
       // Swipe support for mobile: compare the start and end touch point
       // and move in whichever axis had the bigger change.
       var touchStartX = 0, touchStartY = 0;
-      gridEl.addEventListener('touchstart', function (e) {
+      boardEl.addEventListener('touchstart', function (e) {
         touchStartX = e.changedTouches[0].clientX;
         touchStartY = e.changedTouches[0].clientY;
       });
-      gridEl.addEventListener('touchend', function (e) {
+      boardEl.addEventListener('touchend', function (e) {
         var dx = e.changedTouches[0].clientX - touchStartX;
         var dy = e.changedTouches[0].clientY - touchStartY;
         var THRESHOLD = 20;
@@ -267,6 +333,12 @@
         } else {
           move(dy > 0 ? 'down' : 'up');
         }
+      });
+
+      // If the board resizes (rotating a phone, resizing the window),
+      // snap every tile to its slot's new pixel position.
+      window.addEventListener('resize', function () {
+        tiles.forEach(function (t) { positionTileEl(tileEls[t.id], t.row, t.col); });
       });
 
       newGameBtn.addEventListener('click', newGame);

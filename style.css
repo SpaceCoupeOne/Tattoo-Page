@@ -1035,93 +1035,140 @@ figure {
   margin-top: 2rem;
 }
 
-.game2048-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+/* .game2048-board is the outer chrome (background, border, padding).
+   .game2048-bg and .game2048-tiles are stacked exactly on top of each
+   other inside it via the shared "inset" - .game2048-bg draws the 16
+   static empty slots, .game2048-tiles holds the real tile elements,
+   positioned in pixels by JS to line up with those slots. Two layers
+   instead of one grid because grid-column/grid-row can't be
+   transitioned, but plain left/top can - that's what lets a tile slide
+   to its new slot instead of the whole board redrawing every move. */
+.game2048-board {
+  position: relative;
   width: 100%;
-  max-width: 380px;
+  max-width: 480px;
   flex: 1 1 280px;
+  aspect-ratio: 1;
   background-color: var(--color-surface);
   border: 1px solid rgba(61, 139, 152, 0.35);
   border-radius: 12px;
-  padding: 8px;
+  padding: 10px;
+  box-sizing: border-box;
   touch-action: none;
 }
 
-.game2048-cell {
-  aspect-ratio: 1;
+.game2048-bg,
+.game2048-tiles {
+  position: absolute;
+  inset: 10px;
+}
+
+.game2048-bg {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.game2048-bg-cell {
+  background-color: var(--color-bg);
+  border-radius: 6px;
+}
+
+.game2048-tile {
+  position: absolute;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 1.4rem;
-  background-color: var(--color-bg);
+  font-size: 1.7rem;
   color: var(--color-text);
   border-radius: 6px;
+  /* Keep this in step with SLIDE_MS in 2048.html's script - that's how
+     long the game waits before cleaning up a merged tile. */
+  transition: left 0.12s ease, top 0.12s ease;
 }
 
-.game2048-cell--mid {
-  font-size: 1.15rem;
+.game2048-tile--mid {
+  font-size: 1.35rem;
 }
 
-.game2048-cell--small {
-  font-size: 0.95rem;
+.game2048-tile--small {
+  font-size: 1.05rem;
+}
+
+.game2048-tile--spawn {
+  animation: game2048-spawn 0.15s ease;
+}
+
+.game2048-tile--merged {
+  animation: game2048-pop 0.15s ease;
+}
+
+@keyframes game2048-spawn {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
+
+@keyframes game2048-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
 /* Tier colors cycle through the site's existing accents as the value
    doubles, so no new hardcoded colors are introduced. 2048 itself gets
    the same gold-to-coral gradient the h1/h2 headings use - reaching it
    is meant to feel like a small payoff. */
-.game2048-cell--2 {
+.game2048-tile--2 {
   background-color: var(--color-surface);
   color: var(--color-muted);
   border: 1px solid var(--color-teal);
 }
 
-.game2048-cell--4 {
+.game2048-tile--4 {
   background-color: var(--color-teal);
   color: var(--color-bg);
 }
 
-.game2048-cell--8 {
+.game2048-tile--8 {
   background-color: var(--color-amber);
   color: var(--color-bg);
 }
 
-.game2048-cell--16 {
+.game2048-tile--16 {
   background-color: var(--color-accent-2);
   color: var(--color-bg);
 }
 
-.game2048-cell--32 {
+.game2048-tile--32 {
   background-color: var(--color-accent);
   color: var(--color-bg);
 }
 
-.game2048-cell--64 {
+.game2048-tile--64 {
   background: linear-gradient(135deg, var(--color-teal), var(--color-accent));
   color: var(--color-bg);
 }
 
-.game2048-cell--128 {
+.game2048-tile--128 {
   background: linear-gradient(135deg, var(--color-accent), var(--color-amber));
   color: var(--color-bg);
 }
 
-.game2048-cell--256 {
+.game2048-tile--256 {
   background: linear-gradient(135deg, var(--color-amber), var(--color-accent-2));
   color: var(--color-bg);
 }
 
-.game2048-cell--512 {
+.game2048-tile--512 {
   background: linear-gradient(135deg, var(--color-accent-2), var(--color-teal));
   color: var(--color-bg);
 }
 
-.game2048-cell--1024,
-.game2048-cell--2048,
-.game2048-cell--super {
+.game2048-tile--1024,
+.game2048-tile--2048,
+.game2048-tile--super {
   background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
   color: var(--color-bg);
 }
