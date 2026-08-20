@@ -40,6 +40,29 @@
   border: 0;
 }
 
+/* Skip link: markup carries both .sr-only and .skip-link, so it's
+   invisible exactly like any other sr-only text until it receives
+   keyboard focus - then this rule undoes every sr-only property and
+   pins it in the corner so it's actually visible above the header. */
+.skip-link:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.65rem 1.25rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+  font-weight: 600;
+  border-radius: 8px;
+  z-index: 1000;
+  text-decoration: none;
+}
+
 html {
   background-image: linear-gradient(180deg,
     #235861 0%, #235861 13%,
@@ -753,8 +776,13 @@ figure {
   border-color: var(--color-accent-2);
 }
 
+/* Plain var(--color-accent-2) here only reaches 3.68:1 on this box's
+   --color-surface background - no existing token pairs with it at
+   4.5:1 (the darkest, --color-bg, only gets to 4.25:1). Tinted 25%
+   toward --color-text instead of introducing a new color: still reads
+   as coral, and lands at ~4.70:1. */
 .books-status-closed strong {
-  color: var(--color-accent-2);
+  color: color-mix(in srgb, var(--color-accent-2) 75%, var(--color-text) 25%);
 }
 
 
@@ -1557,12 +1585,15 @@ figure {
 
 /* Booked, past, and closed (Sunday/Monday) all recede the same way,
    deliberately indistinguishable from each other - a client scanning
-   for a gap only needs "not this one," not "why not." */
+   for a gap only needs "not this one," not "why not." Opacity 0.6, not
+   0.5: at 0.5 this blended down to 3.85:1 against the page background,
+   below the 4.5:1 floor for 0.9rem text. 0.6 lands at ~4.88:1 while
+   still reading as visibly receded next to .day-open. */
 .day-booked,
 .day-past,
 .day-closed {
   color: var(--color-muted);
-  opacity: 0.5;
+  opacity: 0.6;
 }
 
 .day-empty {

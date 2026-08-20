@@ -60,7 +60,7 @@ local copy. Since existing visitors' browsers may already be holding the
 old week-long cache from before this changed, every reference to these
 three files across the HTML pages carries a `?v=N` query string to force a
 fresh fetch past that old cache. Each file tracks its own version number,
-independent of the others (currently `style.css?v=9`, `script.js?v=4`,
+independent of the others (currently `style.css?v=9`, `script.js?v=5`,
 `calendar.js?v=3`). Bump a file's number on every subsequent change to
 it — everywhere that file is referenced, not the other two — to force
 another one-time refetch.
