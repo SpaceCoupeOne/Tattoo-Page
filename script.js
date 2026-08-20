@@ -6,7 +6,13 @@ document.addEventListener('DOMContentLoaded', function () {
   var prevBtn = overlay.querySelector('.lightbox-prev');
   var nextBtn = overlay.querySelector('.lightbox-next');
   if (!closeBtn) return;
-  var lightboxTriggers = document.querySelectorAll('.gallery-item, .preview-grid img');
+  // Both gallery.html and index.html's preview grid wrap each thumbnail in
+  // a real <button class="gallery-item">, so one selector covers both -
+  // that's also what makes every thumbnail keyboard-reachable, not just
+  // mouse-clickable. Don't add ".preview-grid img" back here: the img is
+  // still inside the button, so that would match the same thumbnail twice
+  // (button + its own img) and fire the click handler below twice per click.
+  var lightboxTriggers = document.querySelectorAll('.gallery-item');
 
   // The element that opened the dialog, so focus can return to it on
   // close. Screen reader and keyboard users would otherwise land back at
