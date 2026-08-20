@@ -8,7 +8,7 @@ Red Dagger Tattoo in Pasadena, TX.
 - Plain HTML, CSS, JS. No framework, no build step, no bundler, no npm.
 - 20 static `.html` files at the repo root. No templating — **the header, nav,
   and footer are copy-pasted into every page.**
-- One stylesheet: `style.css` (~1,160 lines).
+- One stylesheet: `style.css` (~1,650 lines).
 - One shared script: `script.js` (lightbox + gallery filters). Loaded only by
   `index.html` and `gallery.html`.
 - Page-specific JS lives in inline `<script>` blocks at the bottom of that page.
@@ -58,10 +58,12 @@ to bust it. `max-age=0, must-revalidate` makes the browser check with
 Netlify on every load (a cheap 304 if unchanged) instead of trusting a
 local copy. Since existing visitors' browsers may already be holding the
 old week-long cache from before this changed, every reference to these
-three files across the HTML pages carries a `?v=2` query string to force a
-fresh fetch past that old cache. Bump that number (`?v=3`, etc.) on
-whichever file actually changed next time — everywhere that file is
-referenced, not the other two — to force another one-time refetch.
+three files across the HTML pages carries a `?v=N` query string to force a
+fresh fetch past that old cache. Each file tracks its own version number,
+independent of the others (currently `style.css?v=9`, `script.js?v=4`,
+`calendar.js?v=3`). Bump a file's number on every subsequent change to
+it — everywhere that file is referenced, not the other two — to force
+another one-time refetch.
 
 ## Colors
 
