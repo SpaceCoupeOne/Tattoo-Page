@@ -13,6 +13,15 @@
   --color-muted:   #dfd5e5;
   --color-ink:     #0d3b45;  /* dark teal, for text on cream fills */
 
+  /* --color-bg darkened 35% toward black. The 2048 tiles put --color-bg
+     text on their --color-accent-2/--color-teal fills and the gradients
+     between them; plain --color-bg only reaches 4.25:1 on the coral tile
+     and ~4.01:1 on the teal one (the darkest of all nine tile
+     backgrounds), both under the 4.5:1 AA floor for normal-size text.
+     This clears both worst cases (4.87:1 on coral, 4.59:1 on teal)
+     without introducing an unrelated color. */
+  --color-tile-ink: color-mix(in srgb, var(--color-bg) 65%, black 35%);
+
   /* brand — from the banner */
   --color-accent:   #f0c000;  /* gold */
   --color-accent-2: #f04830;  /* coral */
@@ -1227,49 +1236,49 @@ figure {
 
 .game2048-tile--4 {
   background-color: var(--color-teal);
-  color: var(--color-bg);
+  color: var(--color-tile-ink);
 }
 
 .game2048-tile--8 {
   background-color: var(--color-amber);
-  color: var(--color-bg);
+  color: var(--color-tile-ink);
 }
 
 .game2048-tile--16 {
   background-color: var(--color-accent-2);
-  color: var(--color-bg);
+  color: var(--color-tile-ink);
 }
 
 .game2048-tile--32 {
   background-color: var(--color-accent);
-  color: var(--color-bg);
+  color: var(--color-tile-ink);
 }
 
 .game2048-tile--64 {
   background: linear-gradient(135deg, var(--color-teal), var(--color-accent));
-  color: var(--color-bg);
+  color: var(--color-tile-ink);
 }
 
 .game2048-tile--128 {
   background: linear-gradient(135deg, var(--color-accent), var(--color-amber));
-  color: var(--color-bg);
+  color: var(--color-tile-ink);
 }
 
 .game2048-tile--256 {
   background: linear-gradient(135deg, var(--color-amber), var(--color-accent-2));
-  color: var(--color-bg);
+  color: var(--color-tile-ink);
 }
 
 .game2048-tile--512 {
   background: linear-gradient(135deg, var(--color-accent-2), var(--color-teal));
-  color: var(--color-bg);
+  color: var(--color-tile-ink);
 }
 
 .game2048-tile--1024,
 .game2048-tile--2048,
 .game2048-tile--super {
   background: linear-gradient(135deg, var(--color-accent), var(--color-accent-2));
-  color: var(--color-bg);
+  color: var(--color-tile-ink);
 }
 
 .game2048-side {

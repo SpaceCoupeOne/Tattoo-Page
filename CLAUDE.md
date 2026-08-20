@@ -49,6 +49,16 @@ source files in `Photos/` untouched.
 and the sitemap use the extensionless form. Internal `href`s use `.html` and
 Netlify resolves them.
 
+**Sitemap `<lastmod>`.** Google either trusts a sitemap's lastmod dates as a
+whole or ignores all of them the moment any look unreliable — there's no
+partial credit for "mostly accurate." So `sitemap.xml`'s dates are never
+hand-typed and never today's date by default: run
+`node scripts/update-sitemap-lastmod.mjs` after committing content changes,
+before you push. It reads each page's real last-changed date straight out of
+`git log`, so a date is only ever there because that file actually changed
+then. If a change is purely cosmetic (whitespace, a comment, a `?v=` bump)
+and shouldn't count as a content change, don't rerun it for that commit.
+
 **CSS/JS caching.** `_headers` sets `/*.css` and `/*.js` to
 `Cache-Control: public, max-age=0, must-revalidate` — not a long max-age.
 There's no filename fingerprinting (no hashed filenames, no build step to
@@ -60,7 +70,7 @@ local copy. Since existing visitors' browsers may already be holding the
 old week-long cache from before this changed, every reference to these
 three files across the HTML pages carries a `?v=N` query string to force a
 fresh fetch past that old cache. Each file tracks its own version number,
-independent of the others (currently `style.css?v=9`, `script.js?v=5`,
+independent of the others (currently `style.css?v=10`, `script.js?v=5`,
 `calendar.js?v=3`). Bump a file's number on every subsequent change to
 it — everywhere that file is referenced, not the other two — to force
 another one-time refetch.
