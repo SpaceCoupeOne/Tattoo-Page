@@ -96,6 +96,15 @@ logic is untouched. After deploying, run
 `curl -s https://serenitybliss.tattoo/PAGE.html`, extract the exact text
 between that page's `<script>` and `</script>`, and hash that.
 
+`connect-src` needs both `https://cloud.umami.is` (where `script.js` is
+served from) and `https://gateway.umami.is` (where the script actually
+POSTs collected events to, via `/api/send`) — Umami Cloud splits those
+across two subdomains. Allowing only the script's own origin looks
+complete and doesn't error on page load, but it silently blocks every
+analytics submission; Chrome's Issues panel (Content Security Policy)
+and the Best Practices Lighthouse audit are what catch it, not a broken
+page.
+
 `style-src` uses `'unsafe-inline'`
 rather than hashing, because `coloring.html`/`mandala.html`/`sand.html` set
 `style="..."` attributes directly in markup, and per-attribute CSP hashing
