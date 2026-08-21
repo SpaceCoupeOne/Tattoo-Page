@@ -102,12 +102,18 @@ rather than hashing, because `coloring.html`/`mandala.html`/`sand.html` set
 (`'unsafe-hashes'`) has weaker browser support than per-script hashing — a
 deliberate, lower-stakes trade (CSS injection risk is much smaller than JS).
 
-**Subresource Integrity was deliberately skipped for the Umami script.**
-`cloud.umami.is/script.js` isn't version-pinned — Umami can change it on
-their end at any time — so an SRI hash would go stale without warning and
-silently kill analytics rather than flag a real problem. Security scanners
-(e.g. Mozilla/MDN Observatory) will keep flagging this; that's a known,
-accepted gap, not an oversight.
+**Subresource Integrity was deliberately skipped for the Umami script and
+the Google Fonts stylesheet.** `cloud.umami.is/script.js` isn't
+version-pinned — Umami can change it on their end at any time — so an SRI
+hash would go stale without warning and silently kill analytics rather
+than flag a real problem. The Google Fonts CSS URL is the same kind of
+moving target for a different reason: Google serves different font-face
+CSS per browser/User-Agent (different formats, different subsets), so
+there's no single fixed response to hash in the first place. Security
+scanners (e.g. Mozilla/MDN Observatory, securityheaders.com) will keep
+flagging both; that's a known, accepted gap, not an oversight. Every other
+`<script>`/`<link>` on the site is same-origin, where SRI doesn't apply —
+you already control that file's own deployment.
 
 ## Colors
 

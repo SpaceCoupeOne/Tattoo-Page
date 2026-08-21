@@ -2,6 +2,7 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Cross-Origin-Resource-Policy: same-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
   Content-Security-Policy: default-src 'self'; script-src 'self' https://cloud.umami.is 'sha256-d7kDL31VaCuIJu7u+P7TnxBwKIFrR/5ou4xmReqltV8=' 'sha256-OwyH2Ih97nRFd9p8Tgv5xUn1y7q+P6AbaiauAZ2vUbY=' 'sha256-8YxZYMd327S+fIgagdIObwMa0HaPNV1BFT1JSpNAzfs=' 'sha256-tPTQIbO7mpu7uA9g5bBW020MwIlPNS+duGujkSxK0cc=' 'sha256-3Lndd2zTCHtYm6yrZhOIlZdDij6Ao4jcPuWKIzKqOwk=' 'sha256-kcLo2YEf8ifUyyr/z8tCubPzZshxykiwOx1jOVDU3yY=' 'sha256-2ESploNssf6JZj3gG20oj/SV3ZtQxBDzpjvqNfQBc+k=' 'sha256-kyBcDkp0ESpg04eLF8xNMcyXr7yiP2o3RqLot+DMpPU=' 'sha256-bAURAEr7RhNS2Pl/5ZJdn3uE/G91AbRpi2PRAdpRaWo=' 'sha256-jdc4j0+t8ks8sliwgM+M+oJegBeSkWanBrSs9Mk3XRE='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloud.umami.is; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
 
 /Photos/*
