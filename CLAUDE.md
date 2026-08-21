@@ -86,7 +86,17 @@ content (not just game/booking pages — this catches `reflections.html` and
 `reflections-preview.html` too, even though their content is otherwise hands
 off), the old hash no longer matches and that page's script silently stops
 running.** Recompute it — `sha256(exact block content) → base64` — and swap
-it into the `script-src` list in `_headers`. `style-src` uses `'unsafe-inline'`
+it into the `script-src` list in `_headers`. **Compute the hash from the
+live deployed page, not the local source file.** Netlify's Pretty URLs
+post-processing rewrites deployed HTML (quotes, attribute order, internal
+links) in a way that changes the exact bytes of everything on the page,
+inline scripts included — a hash computed from the git-tracked `.html`
+file will not match what's actually served, even though the script's own
+logic is untouched. After deploying, run
+`curl -s https://serenitybliss.tattoo/PAGE.html`, extract the exact text
+between that page's `<script>` and `</script>`, and hash that.
+
+`style-src` uses `'unsafe-inline'`
 rather than hashing, because `coloring.html`/`mandala.html`/`sand.html` set
 `style="..."` attributes directly in markup, and per-attribute CSP hashing
 (`'unsafe-hashes'`) has weaker browser support than per-script hashing — a
