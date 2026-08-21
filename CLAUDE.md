@@ -75,6 +75,30 @@ independent of the others (currently `style.css?v=10`, `script.js?v=5`,
 it — everywhere that file is referenced, not the other two — to force
 another one-time refetch.
 
+**Content-Security-Policy lives in `_headers`, keyed to exact inline script
+content.** There's no build step to inject nonces, so the CSP allows each
+page's inline `<script>` block by its own `sha256-` hash instead of
+`'unsafe-inline'` — one global list in the single `/*` block, not per-page
+rules, since Netlify's `_headers` precedence for the *same* header set by
+multiple matching path blocks isn't documented, and a single definition
+sidesteps that ambiguity entirely. **If you edit any inline `<script>` block's
+content (not just game/booking pages — this catches `reflections.html` and
+`reflections-preview.html` too, even though their content is otherwise hands
+off), the old hash no longer matches and that page's script silently stops
+running.** Recompute it — `sha256(exact block content) → base64` — and swap
+it into the `script-src` list in `_headers`. `style-src` uses `'unsafe-inline'`
+rather than hashing, because `coloring.html`/`mandala.html`/`sand.html` set
+`style="..."` attributes directly in markup, and per-attribute CSP hashing
+(`'unsafe-hashes'`) has weaker browser support than per-script hashing — a
+deliberate, lower-stakes trade (CSS injection risk is much smaller than JS).
+
+**Subresource Integrity was deliberately skipped for the Umami script.**
+`cloud.umami.is/script.js` isn't version-pinned — Umami can change it on
+their end at any time — so an SRI hash would go stale without warning and
+silently kill analytics rather than flag a real problem. Security scanners
+(e.g. Mozilla/MDN Observatory) will keep flagging this; that's a known,
+accepted gap, not an oversight.
+
 ## Colors
 
 Defined as CSS custom properties in `:root` at the top of `style.css`. Use the

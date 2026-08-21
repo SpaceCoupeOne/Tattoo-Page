@@ -1,3 +1,9 @@
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://cloud.umami.is 'sha256-L+KFF9d/Rh+mC1vKCZG/Vw31uBDG5yRVdmvkX9QPIgc=' 'sha256-NMyIYjX1IAbKl7WZokFfPeEKbUvff4OuuyYYtr6ndeQ=' 'sha256-67s9HBMdqnbxFyOt5DOBGh+Xd+vekTBN36sxogGHa0g=' 'sha256-vYJ8JUqelabkV5cCqW0MvU25ZfwKPuBEYO1cSr80YLI=' 'sha256-TFUsiwUk0pF9IUq6zcvvEqsGusgLO9kzLPNLegabOf0=' 'sha256-ViTD6QERlPJ/4FKawPuqMtpF2kg2FaVhMsHN5HGAaLg=' 'sha256-3hTgSXqh7w9vKYHDv5Q6GcSZzNNZC92t2F2nHRhol0o=' 'sha256-k7/nqkyaZ6vTzfjI5x6jROzyrz+JAR581qt596v14Ec=' 'sha256-QkMbBhSK33NWOfLB4/ANcicpGnRtgWLQI5mSrkxvjyQ=' 'sha256-1KaOBLeB4ufR/iW10pfZwY0EdUEoof6y54p6TKkb2vU='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloud.umami.is; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'
+
 /Photos/*
   Cache-Control: public, max-age=31536000, immutable
 
