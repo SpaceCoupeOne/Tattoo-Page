@@ -41,6 +41,19 @@ homepage previews use `w=700`, the header logo uses `w=1100`. Always include
 explicit `width` and `height` attributes to prevent layout shift. Keep the raw
 source files in `Photos/` untouched.
 
+**Google Fonts loads with `&display=optional`, not `&display=swap`.**
+Fraunces (headings) is a heavy variable font with noticeably different
+metrics than its fallback, so on `display=swap` the browser paints the
+hero `<h1>` in the fallback font, then reflows the whole page below it
+the moment Fraunces arrives — a real, measured CLS regression (Lighthouse
+traced it to the `<main>` landmark, which is just the nearest ancestor
+box containing the pushed content, not the actual cause). `optional`
+gives the font a brief window before first paint and, if it's not ready
+by then, keeps the fallback for that whole page load instead of
+swapping in later — trading an occasional fallback-font render on a slow
+connection for zero layout shift. `reflections.html` still uses `swap`,
+deliberately left alone per the hands-off list below.
+
 **Forms are Netlify Forms**, not a third-party service. They need
 `data-netlify="true"`, a `netlify-honeypot="bot-field"`, and a matching hidden
 `form-name` input. Free tier caps at 100 submissions/month across all forms.
